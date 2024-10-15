@@ -1,0 +1,29 @@
+# Direktori vendor yang dihasilkan oleh Composer
+/vendor/
+
+# File Composer lock yang spesifik untuk lingkungan lokal
+/composer.lock
+
+# File konfigurasi editor atau IDE
+.vscode/
+/.idea/
+/nbproject/
+
+# Cache Composer
+composer.phar
+
+# File log dan debug
+*.log
+
+# File-file sementara dan backup
+*.bak
+*.tmp
+*.swp
+
+# Cache dan file sementara PHP
+/.phpunit.result.cache
+/phpunit.xml
+/phpunit.xml.dist
+
+# Direktori environment jika ada
+.env

@@ -1,0 +1,52 @@
+@startuml
+
+entity Students {
+    *id : string <<PK>> <<auto_generate>>
+    --
+    *photo : string
+    *fullname : string
+    *phone : string
+    *address : string
+    *school : string
+    *status : string
+}
+
+entity Batch {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    id_student : string <<FK>>
+    registration_date : date
+    year : int
+    batch : int
+}
+
+' entity Employees {
+'     *id : string <<PK>> <<auto_generate>>
+'     --
+'     *photo : string
+'     *fullname : string
+'     *phone : string
+'     *email : string
+'     *address : string
+'     *id_role : int <<FK>>
+' }
+
+' entity Roles {
+'     *id : int <<auto_increment>>
+'     --
+'     *role : string
+' }
+
+entity Portofolios {
+    *id : int <<auto_increment>>
+    --
+    *id_student : string
+    *type : string
+    *portofolio_name : string
+}
+
+Students |o--o{ Portofolios : Has
+Students ||--|{ Batch : batch
+' Employees ||--|{ Roles : Role
+
+@enduml

@@ -11,5 +11,6 @@ interface StudentRepository {
     function getByName(string $name) :?Student;
     function getAll() :array;
     function update(Student $newStudent) :Student;
+    function deleteAll() :void;
 
 }

@@ -14,10 +14,9 @@ class StudentRepositoryImpl implements StudentRepository {
     }
 
     function add(Student $student) :Student {
-        $statement = $this->connection->prepare("INSERT INTO students (photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?)");
-        $statement->execute([$student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
+        $statement = $this->connection->prepare("INSERT INTO students (id, photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?,?)");
+        $statement->execute([$student->getId(), $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
 
-        $student->setId($this->connection->lastInsertId());
         return $student;
     }
 
@@ -42,7 +41,7 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function getByName(string $name): ?Student
     {
-        $statement = $this->connection->prepare("SELECT * FROM students WHERE id = ?");
+        $statement = $this->connection->prepare("SELECT * FROM students WHERE fullname = ?");
         $statement->execute([$name]);
 
         try {
@@ -61,7 +60,8 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function getAll(): array
     {
-        $statement = $this->connection->prepare("SELECT * FROM student");
+        $statement = $this->connection->prepare("SELECT * FROM students");
+        $statement->execute();
 
         $students = [];
         try {
@@ -70,6 +70,7 @@ class StudentRepositoryImpl implements StudentRepository {
                     $student = new Student(
                         $row["id"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
                     );
+                    
                     $students[] = $student;
                 }
                 return $students;
@@ -83,7 +84,16 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function update(Student $newStudent): Student
     {
+        $statement = $this->connection->prepare("UPDATE students SET photo = ?, fullname = ?, phone = ?, address = ?, school = ?, status = ? WHERE id = ?");
+        $statement->execute([$newStudent->getPhoto(), $newStudent->getFullname(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getStatus(), $newStudent->getId()]);
+    
         return $newStudent;
+    }
+
+    function deleteAll(): void
+    {
+        $statement = $this->connection->prepare("DELETE FROM students");
+        $statement->execute();
     }
 
 }

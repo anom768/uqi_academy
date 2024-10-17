@@ -13,10 +13,10 @@ class Batch {
     private int $batch;
 
     // Constructor
-    public function __construct(int $id, string $id_student, string $registration_date, int $year, int $batch) {
+    public function __construct(int $id = 0, string $id_student, string $registration_date , int $year, int $batch) {
         $this->id = $id;
         $this->id_student = $id_student;
-        $this->registration_date = new DateTime($registration_date); // Menggunakan DateTime untuk tanggal
+        $this->registration_date = new DateTime($registration_date);
         $this->year = $year;
         $this->batch = $batch;
     }

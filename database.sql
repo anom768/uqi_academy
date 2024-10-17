@@ -24,7 +24,9 @@ CREATE TABLE portofolios (
 CREATE TABLE batch (
     id INT NOT NULL AUTO_INCREMENT,
     id_student VARCHAR(10) NOT NULL,
-    registration_date DATE NOT NULL,
+    registration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    year INT NOT NULL,
+    batch INT NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_student_batch FOREIGN KEY (id_student) REFERENCES students(id)
 ) ENGINE = INNODB;

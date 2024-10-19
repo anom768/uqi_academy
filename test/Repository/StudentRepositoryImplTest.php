@@ -18,7 +18,7 @@ class StudentRepositoryimplTest extends TestCase {
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }
@@ -47,6 +47,17 @@ class StudentRepositoryimplTest extends TestCase {
 
     public function testGetByNameNotFound() {
         $student = $this->studentRepository->getByName("BASD");
+        self::assertEquals(null, $student);
+    }
+
+    public function testGetByPhone() {
+        $this->addStudent();
+        $student = $this->studentRepository->getByPhone("089");
+        self::assertEquals("BAS", $student->getFullname());
+    }
+
+    public function testGetByPhoneNotFound() {
+        $student = $this->studentRepository->getByPhone("BASD");
         self::assertEquals(null, $student);
     }
 

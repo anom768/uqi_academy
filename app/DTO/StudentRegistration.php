@@ -1,19 +1,19 @@
 <?php
 
-namespace com\bangkitanomsedhayu\uqi\academy\Entity;
+namespace com\bangkitanomsedhayu\uqi\academy\DTO;
 
-class Student {
+class StudentRegistration {
 
-    private string $id;
-    private string $password;
-    private string $photo;
-    private string $fullname;
-    private string $phone;
-    private string $address;
-    private string $school;
-    private string $status;
+    private ?string $id;
+    private ?string $password;
+    private ?string $photo;
+    private ?string $fullname;
+    private ?string $phone;
+    private ?string $address;
+    private ?string $school;
+    private ?string $status;
 
-    public function __construct(string $id, string $password, string $photo, string $fullname, string $phone, string $address, string $school, string $status)
+    public function __construct(?string $id, ?string $password, ?string $photo, ?string $fullname, ?string $phone, ?string $address, ?string $school, ?string $status)
     {
         $this->id = $id;
         $this->password = $password;
@@ -26,7 +26,7 @@ class Student {
     }
 
     // Getter untuk id
-    public function getId(): string {
+    public function getId(): ?string {
         return $this->id;
     }
 
@@ -36,7 +36,7 @@ class Student {
     }
 
     // Getter untuk password
-    public function getPassword(): string {
+    public function getPassword(): ?string {
         return $this->password;
     }
 
@@ -46,7 +46,7 @@ class Student {
     }
 
     // Getter untuk photo
-    public function getPhoto(): string {
+    public function getPhoto(): ?string {
         return $this->photo;
     }
 
@@ -56,7 +56,7 @@ class Student {
     }
 
     // Getter untuk fullname
-    public function getFullname(): string {
+    public function getFullname(): ?string {
         return $this->fullname;
     }
 
@@ -66,7 +66,7 @@ class Student {
     }
 
     // Getter untuk phone
-    public function getPhone(): string {
+    public function getPhone(): ?string {
         return $this->phone;
     }
 
@@ -76,7 +76,7 @@ class Student {
     }
 
     // Getter untuk address
-    public function getAddress(): string {
+    public function getAddress(): ?string {
         return $this->address;
     }
 
@@ -86,7 +86,7 @@ class Student {
     }
 
     // Getter untuk school
-    public function getSchool(): string {
+    public function getSchool(): ?string {
         return $this->school;
     }
 
@@ -96,7 +96,7 @@ class Student {
     }
 
     // Getter untuk status
-    public function getStatus(): string {
+    public function getStatus(): ?string {
         return $this->status;
     }
 

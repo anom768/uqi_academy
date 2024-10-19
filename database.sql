@@ -3,6 +3,7 @@ CREATE DATABASE uqi_academy;
 
 CREATE TABLE students (
     id VARCHAR(10) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     photo VARCHAR(255) NOT NULL,
     fullname VARCHAR(255) NOT NULL,
     phone VARCHAR(15) NOT NULL,
@@ -30,6 +31,13 @@ CREATE TABLE batch (
     PRIMARY KEY (id),
     CONSTRAINT fk_student_batch FOREIGN KEY (id_student) REFERENCES students(id)
 ) ENGINE = INNODB;
+
+CREATE TABLE sessions (
+    id VARCHAR(255) NOT NULL,
+    id_student VARCHAR(10) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_session FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
 
 -- CREATE TABLE employees (
 --     id VARCHAR(10) NOT NULL,

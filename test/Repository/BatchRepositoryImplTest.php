@@ -24,7 +24,7 @@ class BatchRepositoryImplTest extends TestCase {
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }

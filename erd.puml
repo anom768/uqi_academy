@@ -3,6 +3,7 @@
 entity Students {
     *id : string <<PK>> <<auto_generate>>
     --
+    *password : string
     *photo : string
     *fullname : string
     *phone : string
@@ -18,6 +19,12 @@ entity Batch {
     registration_date : date
     year : int
     batch : int
+}
+
+entity Sessions {
+    *id : string <<PK>> <<auto_generate>>
+    --
+    *id_student : string <<FK>>
 }
 
 ' entity Employees {
@@ -47,6 +54,7 @@ entity Portofolios {
 
 Students |o--o{ Portofolios : Has
 Students ||--|{ Batch : batch
+Students |o--o| Sessions : session
 ' Employees ||--|{ Roles : Role
 
 @enduml

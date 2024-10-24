@@ -7,6 +7,8 @@ require_once __DIR__ . '/../Helper/HelperTest.php';
 use com\bangkitanomsedhayu\uqi\academy\Config\Database;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Session;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
+use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepository;
+use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
@@ -16,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 class SessionServiceImplTest extends TestCase
 {
     private SessionService $sessionService;
+    private BatchRepository $batchRepository;
     private SessionRepository $sessionRepository;
     private StudentRepository $studentRepository;
 
@@ -23,15 +26,17 @@ class SessionServiceImplTest extends TestCase
     {
         $this->sessionRepository = new SessionRepositoryImpl(Database::getConnection());
         $this->studentRepository = new StudentRepositoryImpl(Database::getConnection());
+        $this->batchRepository = new BatchRepositoryImpl(Database::getConnection());
         $this->sessionService = new SessionServiceImpl($this->sessionRepository, $this->studentRepository);
 
+        $this->batchRepository->deleteAll();
         $this->sessionRepository->deleteAll();
         $this->studentRepository->deleteAll();
     }
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }

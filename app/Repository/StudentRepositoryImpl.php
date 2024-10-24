@@ -14,8 +14,8 @@ class StudentRepositoryImpl implements StudentRepository {
     }
 
     function add(Student $student) :Student {
-        $statement = $this->connection->prepare("INSERT INTO students (id, password, photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?,?,?)");
-        $statement->execute([$student->getId(), $student->getPassword(), $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
+        $statement = $this->connection->prepare("INSERT INTO students (id, password, temp_password, photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?,?,?,?)");
+        $statement->execute([$student->getId(), $student->getPassword(), $student->getTempPassword(), $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
         
         return $student;
     }
@@ -28,7 +28,7 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -47,7 +47,7 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -66,7 +66,7 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -87,7 +87,7 @@ class StudentRepositoryImpl implements StudentRepository {
             if ($rows = $statement->fetchAll()) {
                 foreach ($rows as $row) {
                     $student = new Student(
-                        $row["id"], $row["password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                        $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
                     );
                     
                     $students[] = $student;
@@ -103,8 +103,8 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function update(Student $newStudent): Student
     {
-        $statement = $this->connection->prepare("UPDATE students SET password = ?, photo = ?, fullname = ?, phone = ?, address = ?, school = ?, status = ? WHERE id = ?");
-        $statement->execute([$newStudent->getPassword(), $newStudent->getPhoto(), $newStudent->getFullname(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getStatus(), $newStudent->getId()]);
+        $statement = $this->connection->prepare("UPDATE students SET password = ?, temp_password = ?, photo = ?, fullname = ?, phone = ?, address = ?, school = ?, status = ? WHERE id = ?");
+        $statement->execute([$newStudent->getPassword(), $newStudent->getTempPassword(), $newStudent->getPhoto(), $newStudent->getFullname(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getStatus(), $newStudent->getId()]);
     
         return $newStudent;
     }

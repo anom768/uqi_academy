@@ -4,6 +4,7 @@ CREATE DATABASE uqi_academy;
 CREATE TABLE students (
     id VARCHAR(10) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    temp_password VARCHAR(10),
     photo VARCHAR(255) NOT NULL,
     fullname VARCHAR(255) NOT NULL,
     phone VARCHAR(15) NOT NULL,

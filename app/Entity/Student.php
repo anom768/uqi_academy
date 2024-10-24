@@ -6,6 +6,7 @@ class Student {
 
     private string $id;
     private string $password;
+    private string $temp_password;
     private string $photo;
     private string $fullname;
     private string $phone;
@@ -13,10 +14,11 @@ class Student {
     private string $school;
     private string $status;
 
-    public function __construct(string $id, string $password, string $photo, string $fullname, string $phone, string $address, string $school, string $status)
+    public function __construct(string $id, string $password, string $temp_password, string $photo, string $fullname, string $phone, string $address, string $school, string $status)
     {
         $this->id = $id;
         $this->password = $password;
+        $this->temp_password = $temp_password;
         $this->photo = $photo;
         $this->fullname = $fullname;
         $this->phone = $phone;
@@ -38,6 +40,16 @@ class Student {
     // Getter untuk password
     public function getPassword(): string {
         return $this->password;
+    }
+
+    // Setter untuk password
+    public function setTempPassword(string $temp_password): void {
+        $this->temp_password = $temp_password;
+    }
+
+    // Getter untuk password
+    public function getTempPassword(): string {
+        return $this->temp_password;
     }
 
     // Setter untuk password

@@ -11,20 +11,23 @@ class BatchRepositoryImplTest extends TestCase {
 
     private StudentRepository $studentRepository;
     private BatchRepository $batchRepository;
+    private SessionRepository $sessionRepository;
 
     function setUp(): void
     {
         $connection = Database::getConnection();
         $this->studentRepository = new StudentRepositoryImpl($connection);
         $this->batchRepository = new BatchRepositoryImpl($connection);
+        $this->sessionRepository = new SessionRepositoryImpl($connection);
 
+        $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
         $this->studentRepository->deleteAll();
     }
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }

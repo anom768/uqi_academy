@@ -4,6 +4,7 @@ entity Students {
     *id : string <<PK>> <<auto_generate>>
     --
     *password : string
+    temp_password : string
     *photo : string
     *fullname : string
     *phone : string

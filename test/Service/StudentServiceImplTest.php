@@ -11,6 +11,8 @@ use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepositoryImpl;
 use Exception;
@@ -21,6 +23,7 @@ class StudentServiceImplTest extends TestCase {
     private StudentRepository $studentRepository;
     private PortofolioRepository $portofolioRepository;
     private BatchRepository $batchRepository;
+    private SessionRepository $sessionRepository;
     private StudentService $studentService;
 
     function setUp(): void
@@ -29,15 +32,17 @@ class StudentServiceImplTest extends TestCase {
         $this->studentRepository = new StudentRepositoryImpl($connection);
         $this->portofolioRepository = new PortofolioRepositoryImpl($connection);
         $this->batchRepository = new BatchRepositoryImpl($connection);
+        $this->sessionRepository = new SessionRepositoryImpl($connection);
         $this->studentService = new StudentServiceImpl($this->studentRepository, $this->batchRepository);
 
+        $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
         $this->portofolioRepository->deleteAll();
         $this->studentRepository->deleteAll();
     }
 
     private function studentRegistration() : StudentResponse {
-        $request = new StudentRegistration(null, null, "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled");
+        $request = new StudentRegistration("bangkit.jpg", "BAS", "089", "jalan", "smk");
         $student = $this->studentService->register($request, 2024, 1);
         return $student;
     }
@@ -55,7 +60,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("All data is required");
 
-        $request = new StudentRegistration("", "", "", "", "", "", "", "", "");
+        $request = new StudentRegistration("", "", "", "", "", "");
         $this->studentService->register($request, 2024, 1);
     }
 
@@ -63,7 +68,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("All data is required");
 
-        $request = new StudentRegistration(null, null, null, null, null, null, null, null, null);
+        $request = new StudentRegistration(null, null, null, null, null, null);
         $this->studentService->register($request, 2024, 1);
     }
 
@@ -71,7 +76,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Number phone is already used");
 
-        $request = new StudentRegistration(null, null, "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled");
+        $request = new StudentRegistration("bangkit.jpg", "BAS", "089", "jalan", "smk");
         $this->studentService->register($request, 2024, 1)->getStudent();
         $this->studentService->register($request, 2024, 1)->getStudent();
     }
@@ -139,7 +144,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Number phone is already used");
 
-        $request = new StudentRegistration(null, null, "bangkit.jpg", "BAS", "777", "jalan", "smk", "enabled");
+        $request = new StudentRegistration("bangkit.jpg", "BAS", "777", "jalan", "smk");
         $this->studentService->register($request, 2024, 1);
         
         $student = $this->studentRegistration()->getStudent();

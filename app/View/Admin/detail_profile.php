@@ -31,28 +31,92 @@
             margin: 20px;
         }
 
-        .anita-page-title {
-            font-size: 24px;
+        .student-details h1 {
+            font-size: 48px;
+            /* Atur ukuran sesuai kebutuhan, misalnya 28px */
+            line-height: 1.2;
+            /* Sesuaikan line-height agar lebih proporsional */
             margin-bottom: 10px;
+            /* Sesuaikan margin bawah jika diperlukan */
         }
 
-        /* Style untuk description list */
+        .anita-page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            /* Tambahkan margin di bawah nama siswa */
+        }
+
+        /* Grid untuk dua kolom di bawah nama siswa */
+        .student-info-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Kolom kiri dan kanan */
+            gap: 20px;
+            /* Jarak antara kolom kiri (data) dan kanan (social media) */
+        }
+
+        /* Kolom Kiri: Data Siswa */
         .student-info {
             display: grid;
             grid-template-columns: 100px 1fr;
-            /* Kolom untuk label (dt) dan deskripsi (dd) */
+            /* Kolom label dan data */
             gap: 10px;
         }
 
         .student-info dt {
             font-weight: bold;
-            justify-self: start;
         }
 
         .student-info dd {
             margin: 0;
-            /* Hilangkan margin default pada dd */
-            justify-self: start;
+        }
+
+        /* Kolom Kanan: Link Media Sosial */
+        .student-social-media dl {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            /* Sama seperti data siswa */
+            gap: 10px;
+        }
+
+        .student-social-media dt {
+            font-weight: bold;
+        }
+
+        .student-social-media dd {
+            margin: 0;
+        }
+
+        .student-social-media a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .student-social-media a:hover {
+            text-decoration: underline;
+        }
+
+        /* Kurangi padding pada header jika terlalu tinggi */
+        header.anita-header {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        /* Kurangi padding atau margin di bagian pertama page title */
+        .anita-section {
+            padding-top: 20px;
+            /* Sesuaikan nilai */
+        }
+
+        /* Kurangi margin pada .anita-albums-back-wrap untuk mengurangi gap */
+        .anita-albums-back-wrap {
+            margin-top: 10px;
+            /* Atur sesuai kebutuhan */
+        }
+
+        /* Kurangi margin atau padding antara section dan container */
+        .anita-container {
+            padding-top: 100px;
         }
     </style>
 </head>
@@ -109,22 +173,36 @@
 
                     <!-- Student Name and Details -->
                     <div class="student-details" data-aos="fade-up" data-aos-delay="50">
-                        <!-- Student Name -->
+                        <!-- Nama Siswa -->
                         <h1 class="anita-page-title"><?= $model["student"]->getFullname() ?></h1>
-                        <!-- Additional Data -->
-                        <dl class="student-info">
-                            <dt>Phone</dt>
-                            <dd><?= $model["student"]->getPhone() ?></dd>
 
-                            <dt>Address</dt>
-                            <dd><?= $model["student"]->getAddress() ?></dd>
+                        <!-- Container untuk Data Siswa dan Media Sosial -->
+                        <div class="student-info-container">
+                            <!-- Kolom Kiri: Data Siswa -->
+                            <div class="student-data">
+                                <dl class="student-info">
+                                    <dt>ID</dt>
+                                    <dd><?= $model["student"]->getId() ?></dd>
+                                    <dt>Phone</dt>
+                                    <dd><?= $model["student"]->getPhone() ?></dd>
+                                    <dt>School</dt>
+                                    <dd><?= $model["student"]->getSchool() ?></dd>
+                                    <dt>Address</dt>
+                                    <dd><?= $model["student"]->getAddress() ?></dd>
+                                </dl>
+                            </div>
 
-                            <dt>School</dt>
-                            <dd><?= $model["student"]->getSchool() ?></dd>
-                        </dl>
+                            <!-- Kolom Kanan: Link Media Sosial -->
+                            <div class="student-social-media">
+                                <dl>
+                                    <?php foreach ($model["socialMedias"] as $socialMedia) {?>
+                                        <dt><?= $socialMedia->getPlatform() ?></dt>
+                                        <dd><a href="<?= $socialMedia->getUrl() ?>" target="_blank"><?= $socialMedia->getUrl() ?></a></dd>
+                                    <?php } ?>
+                                </dl>
+                            </div>
+                        </div>
                     </div>
-
-
 
                     <!-- <div class="anita-post-meta anita-meta" data-aos="fade-up" data-aos-delay="100">
                         <span>Love Story</span>

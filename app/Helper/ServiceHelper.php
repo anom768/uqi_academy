@@ -2,6 +2,10 @@
 
 namespace com\bangkitanomsedhayu\uqi\academy\Helper;
 
+use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
@@ -45,6 +49,11 @@ class ServiceHelper {
         if ($student != null && $student->getId() != $request->getId()) {
             throw new Exception("Number phone is already used");
         }
+
+        $student = $studentRepository->getByEmail($request->getEmail());
+        if ($student != null && $student->getId() != $request->getId()) {
+            throw new Exception("Email is already used");
+        }
     }
 
     public static function generateIDStudent(int $year, int $batch, StudentRepository $studentRepository) :string {
@@ -67,6 +76,38 @@ class ServiceHelper {
 
     public static function hashPassword(string $password): string {
         return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    public static function skillAddCheck(SkillRequest $request) {
+        if (trim($request->getSkill()) == "" || $request->getSkill() == null) {
+            throw new Exception("Skill name is required");
+        }
+
+        if ($request->getScore() < 0 || $request->getScore() > 10) {
+            throw new Exception("Score must between 0 to 10");
+        }
+    }
+
+    public static function languageAddCheck(LanguageRequest $request) {
+        if (trim($request->getLanguage()) == "" || $request->getLanguage() == null) {
+            throw new Exception("Language name is required");
+        }
+
+        if ($request->getScore() < 0 || $request->getScore() > 10) {
+            throw new Exception("Score must between 0 to 10");
+        }
+    }
+
+    public static function educationAddCheck(EducationRequest $request) {
+        if (trim($request->getSchool()) == "" || $request->getSchool() == null) {
+            throw new Exception("School name is required");
+        }
+    }
+
+    public static function experienceAddCheck(ExperienceRequest $request) {
+        if (trim($request->getCompany()) == "" || $request->getCompany() == null) {
+            throw new Exception("Company name is required");
+        }
     }
 
 }

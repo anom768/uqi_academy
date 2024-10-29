@@ -36,7 +36,8 @@ class StudentServiceImpl implements StudentService {
             $password = ServiceHelper::generateRandomPassword();
             $bcryptPassword = ServiceHelper::hashPassword($password);
 
-            $student = new Student($id, $bcryptPassword, $password, $request->getPhoto(), $request->getFullname(), $request->getPhone(), $request->getAddress(), $request->getSchool(), "enabled");
+            $student = new Student($id, $bcryptPassword, $password, $request->getPhoto(), $request->getFullname(),
+            "", "", "", "", $request->getPhone(), $request->getAddress(), $request->getSchool(), "enabled");
             $this->studentRepository->add($student);
 
             $batch = new Batch(0, $student->getId(), "", $year, $batch);
@@ -75,6 +76,11 @@ class StudentServiceImpl implements StudentService {
         return new StudentResponse($this->studentRepository->getByName($name));
     }
 
+    public function getByEmail(string $email): StudentResponse
+    {
+        return new StudentResponse($this->studentRepository->getByEmail($email));
+    }
+
     public function getAll(): StudentArrayResponse
     {
         return new StudentArrayResponse($this->studentRepository->getAll());
@@ -87,7 +93,8 @@ class StudentServiceImpl implements StudentService {
         try {
             Database::beginTransaction();
             $password = ServiceHelper::hashPassword($request->getPassword());
-            $student = new Student($request->getId(), $password, "", $request->getPhoto(), $request->getFullname(), $request->getPhone(), $request->getAddress(), $request->getSchool(), $request->getStatus());
+            $student = new Student($request->getId(), $password, "", $request->getPhoto(), $request->getFullname(),
+                $request->getSpecialist(), $request->getEmail(), "", $request->getBio(), $request->getPhone(), $request->getAddress(), $request->getSchool(), $request->getStatus());
             $this->studentRepository->update($student);
             Database::commitTransaction();
             return new StudentResponse($student);

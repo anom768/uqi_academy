@@ -6,10 +6,13 @@ use com\bangkitanomsedhayu\uqi\academy\Config\Database;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
+use com\bangkitanomsedhayu\uqi\academy\Entity\SocialMedia;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepository;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepositoryImpl;
 use PHPUnit\Framework\TestCase;
@@ -18,8 +21,9 @@ class AddAdminTest extends TestCase {
 
     private StudentRepository $studentRepository;
     private BatchRepository $batchRepository;
-    private StudentService $studentService;
     private SessionRepository $sessionRepository;
+    private SocialMediaRepository $socialMediaRepository;
+    private StudentService $studentService;
 
     function setUp(): void
     {
@@ -27,8 +31,10 @@ class AddAdminTest extends TestCase {
         $this->studentRepository = new StudentRepositoryImpl($connection);
         $this->batchRepository = new BatchRepositoryImpl($connection);
         $this->sessionRepository = new SessionRepositoryImpl($connection);
+        $this->socialMediaRepository = new SocialMediaRepositoryImpl($connection);
         $this->studentService = new StudentServiceImpl($this->studentRepository, $this->batchRepository);
 
+        $this->socialMediaRepository->deleteAll();
         $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
         $this->studentRepository->deleteAll();
@@ -55,6 +61,7 @@ class AddAdminTest extends TestCase {
             "rahasia",
             $student->getPhoto(),
             $student->getFullname(),
+            "3d", "mail", "bio",
             $student->getPhone(),
             $student->getAddress(),
             $student->getSchool(),
@@ -86,6 +93,9 @@ class AddAdminTest extends TestCase {
         foreach ($requests as $request) {
             $this->studentService->register($request, 2024, 1);
         }
+
+        $this->socialMediaRepository->add(new SocialMedia(0, "2401-002", "Facebook", "https://facebook.com"));
+        $this->socialMediaRepository->add(new SocialMedia(0, "2401-002", "Instagram", "https://facebook.com"));
 
         self::assertTrue(true);
         

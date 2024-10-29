@@ -7,6 +7,10 @@ entity Students {
     temp_password : string
     *photo : string
     *fullname : string
+    specialist : string
+    *email : string
+    website : string
+    bio : text
     *phone : string
     *address : string
     *school : string
@@ -16,16 +20,60 @@ entity Students {
 entity Batch {
     *id : int <<PK>> <<auto_increment>>
     --
-    id_student : string <<FK>>
-    registration_date : date
-    year : int
-    batch : int
+    *id_student : string <<FK>>
+    *registration_date : date
+    *year : int
+    *batch : int
 }
 
 entity Sessions {
     *id : string <<PK>> <<auto_generate>>
     --
     *id_student : string <<FK>>
+}
+
+entity SocialMedia {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    *id_student : string <<FK>>
+    *platform : string
+    url : text
+}
+
+entity Skills {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    *id_student : string <<FK>>
+    *skill : string
+    *score : int
+}
+
+entity Languages {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    *id_student : string <<FK>>
+    *language : string
+    *score : int
+}
+
+entity Education {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    *id_student : string <<FK>>
+    *school : string
+    *entry_year : int
+    *graduate_year : int
+}
+
+entity Experience {
+    *id : int <<PK>> <<auto_increment>>
+    --
+    *id_student : string <<FK>>
+    *type : string
+    *company : string
+    *entry_date : date
+    *end_date : date
+    description : text
 }
 
 ' entity Employees {
@@ -53,9 +101,14 @@ entity Portofolios {
     *portofolio_name : string
 }
 
-Students |o--o{ Portofolios : Has
+Students |o--o{ Portofolios : has
 Students ||--|{ Batch : batch
 Students |o--o| Sessions : session
-' Employees ||--|{ Roles : Role
+Students }o--|| SocialMedia : has
+Students }o--o{ Skills : has
+Students }o--o{ Languages : speak
+Students }|--|{ Education : education
+Students }o--|{ Experience : experience
+Employees ||--|{ Roles : Role
 
 @enduml

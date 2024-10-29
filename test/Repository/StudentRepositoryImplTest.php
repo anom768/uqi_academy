@@ -12,10 +12,13 @@ class StudentRepositoryimplTest extends TestCase {
 
     protected function setUp(): void
     {
-        $this->studentRepository = new StudentRepositoryImpl(Database::getConnection("test"));
-        $batchRepository = new BatchRepositoryImpl(Database::getConnection());
-        $sessionRepository = new SessionRepositoryImpl(Database::getConnection());
+        $connection = Database::getConnection();
+        $this->studentRepository = new StudentRepositoryImpl($connection);
+        $batchRepository = new BatchRepositoryImpl($connection);
+        $sessionRepository = new SessionRepositoryImpl($connection);
+        $socialMediaRepository = new SocialMediaRepositoryImpl($connection);
 
+        $socialMediaRepository->deleteAll();
         $sessionRepository->deleteAll();
         $batchRepository->deleteAll();
         $this->studentRepository->deleteAll();
@@ -23,7 +26,7 @@ class StudentRepositoryimplTest extends TestCase {
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "3d", "email", "web","BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }
@@ -52,6 +55,20 @@ class StudentRepositoryimplTest extends TestCase {
 
     public function testGetByNameNotFound() {
         $student = $this->studentRepository->getByName("BASD");
+        self::assertEquals(null, $student);
+    }
+
+    public function testGetByEmail() {
+        $student = $this->addStudent();
+        $student->setEmail("email");
+        $this->studentRepository->update($student);
+        
+        $student = $this->studentRepository->getByEmail("email");
+        self::assertEquals("BAS", $student->getFullname());
+    }
+
+    public function testGetByEmailNotFound() {
+        $student = $this->studentRepository->getByEmail("BASD");
         self::assertEquals(null, $student);
     }
 

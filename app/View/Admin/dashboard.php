@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -29,10 +30,10 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/students">Students</a>
+                        <a class="nav-link" href="/register">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
+                        <a class="nav-link" href="/logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -63,7 +64,9 @@
                                 <th class="text-center" scope="col">No</th>
                                 <th class="text-center" scope="col">Photo</th>
                                 <th class="text-center" scope="col">ID</th>
+                                <th class="text-center" scope="col">Temp Password</th>
                                 <th class="text-center" scope="col">Fullname</th>
+                                <th class="text-center" scope="col">Phone</th>
                                 <th class="text-center" scope="col">School</th>
                             </tr>
                         </thead>
@@ -71,16 +74,20 @@
                             <?php $index = 1;
                             foreach ($model["students"] as $student) { ?>
                                 <tr>
-                                    <th class="text-center" scope="row"><?= $index++ ?></th>
+                                    <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
                                     <td>
                                         <img src="/img/uqi/academy/2024/1/<?= $student->getPhoto() ?>" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
                                     </td>
-                                    <td class="text-center"><?= $student->getId() ?></td>
-                                    <td class="text-center"><?= $student->getFullname() ?></td>
-                                    <td class="text-center"><?= $student->getSchool() ?></td>
-                                    <td class="text-center">
+                                    <td class="text-center align-middle">
+                                        <a href="/profile/<?= $student->getId() ?>" class="text-decoration-underline"><?= $student->getId() ?></a>
+                                    </td>
+                                    <td class="text-center align-middle"><?= $student->getTempPassword() ?></td>
+                                    <td class="text-center align-middle"><?= $student->getFullname() ?></td>
+                                    <td class="text-center align-middle"><?= $student->getPhone() ?></td>
+                                    <td class="text-center align-middle"><?= $student->getSchool() ?></td>
+                                    <td class="text-center align-middle">
                                         <form method="get">
-                                            <button class="w-100 btn btn-lg btn-primary" formaction="/profile/<?= $student->getId() ?>">Detail</button>
+                                            <button class="btn btn-primary" formaction="/edit/<?= $student->getId() ?>"><i class="bi bi-pencil"></i></button>
                                         </form>
                                     </td>
                                 </tr>

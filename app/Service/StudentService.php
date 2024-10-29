@@ -14,6 +14,7 @@ interface StudentService {
     function login(StudentLogin $request) :StudentResponse;
     function getByID(string $id) :StudentResponse;
     function getByName(string $name) :StudentResponse;
+    function getByEmail(string $email) :StudentResponse;
     function getAll() :StudentArrayResponse;
     function update(StudentUpdate $request) :StudentResponse;
 

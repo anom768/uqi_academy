@@ -15,7 +15,8 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function add(Student $student) :Student {
         $statement = $this->connection->prepare("INSERT INTO students (id, password, temp_password, photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?,?,?,?)");
-        $statement->execute([$student->getId(), $student->getPassword(), $student->getTempPassword(), $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
+        $statement->execute([$student->getId(), $student->getPassword(), $student->getTempPassword(),
+        $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
         
         return $student;
     }
@@ -28,7 +29,9 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                    $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -47,7 +50,9 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                    $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -66,7 +71,30 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($row = $statement->fetch()) {
                 $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                    $row["address"], $row["school"], $row["status"]
+                );
+                return $student;
+            } else {
+                return null;
+            }
+        } finally {
+            $statement->closeCursor();
+        }
+    }
+
+    function getByEmail(string $email): ?Student
+    {
+        $statement = $this->connection->prepare("SELECT * FROM students WHERE email = ?");
+        $statement->execute([$email]);
+
+        try {
+            if ($row = $statement->fetch()) {
+                $student = new Student(
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                    $row["address"], $row["school"], $row["status"]
                 );
                 return $student;
             } else {
@@ -87,9 +115,10 @@ class StudentRepositoryImpl implements StudentRepository {
             if ($rows = $statement->fetchAll()) {
                 foreach ($rows as $row) {
                     $student = new Student(
-                        $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], $row["phone"], $row["address"], $row["school"], $row["status"]
+                        $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                        $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                        $row["address"], $row["school"], $row["status"]
                     );
-                    
                     $students[] = $student;
                 }
                 return $students;
@@ -103,8 +132,10 @@ class StudentRepositoryImpl implements StudentRepository {
 
     function update(Student $newStudent): Student
     {
-        $statement = $this->connection->prepare("UPDATE students SET password = ?, temp_password = ?, photo = ?, fullname = ?, phone = ?, address = ?, school = ?, status = ? WHERE id = ?");
-        $statement->execute([$newStudent->getPassword(), $newStudent->getTempPassword(), $newStudent->getPhoto(), $newStudent->getFullname(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getStatus(), $newStudent->getId()]);
+        $statement = $this->connection->prepare("UPDATE students SET password = ?, temp_password = ?, photo = ?, fullname = ?, specialist = ?, email = ?, bio = ?, phone = ?, address = ?, school = ?, status = ? WHERE id = ?");
+        $statement->execute([$newStudent->getPassword(), $newStudent->getTempPassword(), $newStudent->getPhoto(),
+        $newStudent->getFullname(), $newStudent->getSpecialist(), $newStudent->getEmail(),
+        $newStudent->getBio(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getStatus(), $newStudent->getId()]);
     
         return $newStudent;
     }

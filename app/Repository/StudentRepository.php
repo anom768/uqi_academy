@@ -10,6 +10,7 @@ interface StudentRepository {
     function getByID(string $id) :?Student;
     function getByName(string $name) :?Student;
     function getByPhone(string $phone) :?Student;
+    function getByEmail(string $email) :?Student;
     function getAll() :array;
     function update(Student $newStudent) :Student;
     function deleteAll() :void;

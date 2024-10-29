@@ -7,6 +7,10 @@ CREATE TABLE students (
     temp_password VARCHAR(10),
     photo VARCHAR(255) NOT NULL,
     fullname VARCHAR(255) NOT NULL,
+    specialist VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
+    website VARCHAR(255),
+    bio TEXT,
     phone VARCHAR(15) NOT NULL,
     address TEXT NOT NULL,
     school VARCHAR(50),
@@ -38,6 +42,55 @@ CREATE TABLE sessions (
     id_student VARCHAR(10) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_student_session FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
+
+ CREATE TABLE social_media (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_student VARCHAR(10) NOT NULL,
+    platform VARCHAR(20) NOT NULL,
+    url TEXT,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_social_media FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
+
+ CREATE TABLE skills (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_student VARCHAR(10) NOT NULL,
+    skill VARCHAR(255),
+    score INT DEFAULT 0,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_skills FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
+
+ CREATE TABLE languages (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_student VARCHAR(10) NOT NULL,
+    languages VARCHAR(255),
+    score INT DEFAULT 0,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_languages FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
+
+ CREATE TABLE educations (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_student VARCHAR(10) NOT NULL,
+    school VARCHAR(255),
+    entry_year INT,
+    graduate_year INT, 
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_educations FOREIGN KEY (id_student) REFERENCES students(id)
+ ) ENGINE = INNODB;
+
+  CREATE TABLE experiences (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_student VARCHAR(10) NOT NULL,
+    type VARCHAR(20),
+    company VARCHAR(255) NOT NULL,
+    entry_date INT NOT NULL,
+    end_date INT NOT NULL,
+    description TEXT,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_student_experiences FOREIGN KEY (id_student) REFERENCES students(id)
  ) ENGINE = INNODB;
 
 -- CREATE TABLE employees (

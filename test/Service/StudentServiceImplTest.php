@@ -60,7 +60,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("All data is required");
 
-        $request = new StudentRegistration("", "", "", "", "", "");
+        $request = new StudentRegistration("", "", "", "", "");
         $this->studentService->register($request, 2024, 1);
     }
 
@@ -68,7 +68,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("All data is required");
 
-        $request = new StudentRegistration(null, null, null, null, null, null);
+        $request = new StudentRegistration(null, null, null, null, null);
         $this->studentService->register($request, 2024, 1);
     }
 
@@ -103,6 +103,17 @@ class StudentServiceImplTest extends TestCase {
         self::assertNull($response->getStudent());
     }
 
+    function testGetByEmailSuccess() {
+        $response = $this->studentRegistration();
+        $student = $this->studentService->getByEmail($response->getStudent()->getEmail());
+        self::assertNotNull($student);
+    }
+
+    function testGetByEmailNotFound() {
+        $response = $this->studentService->getByEmail("notfound");
+        self::assertNull($response->getStudent());
+    }
+
     function testGetAllSuccess() {
         $this->studentRegistration();
         $student = $this->studentService->getAll();
@@ -117,7 +128,7 @@ class StudentServiceImplTest extends TestCase {
     function testUpdateSuccess() {
         $student = $this->studentRegistration()->getStudent();
 
-        $request = new StudentUpdate($student->getId(), "rahasia", "anom.jpg", "ANOM", "777", "rumah", "smp", "disabled");
+        $request = new StudentUpdate($student->getId(), "rahasia", "anom.jpg", "ANOM", "3d", "mail", "bio", "777", "rumah", "smp", "disabled");
         $response = $this->studentService->update($request);
         self::assertNotNull($response->getStudent());
     }
@@ -127,7 +138,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectExceptionMessage("All data is required");
         
         $student = $this->studentRegistration()->getStudent();
-        $request = new StudentUpdate($student->getId(), "", "", "", "", "", "", "");
+        $request = new StudentUpdate($student->getId(),"","","", "", "", "", "", "", "", "");
         $this->studentService->update($request);
     }
 
@@ -136,7 +147,7 @@ class StudentServiceImplTest extends TestCase {
         $this->expectExceptionMessage("All data is required");
         
         $student = $this->studentRegistration()->getStudent();
-        $request = new StudentUpdate($student->getId(), null, null, null, null, null, null, null);
+        $request = new StudentUpdate($student->getId(), null, null, null, null, null, null, null, null, null, null, null);
         $this->studentService->update($request);
     }
 
@@ -148,8 +159,25 @@ class StudentServiceImplTest extends TestCase {
         $this->studentService->register($request, 2024, 1);
         
         $student = $this->studentRegistration()->getStudent();
-        $request = new StudentUpdate($student->getId(), "rahasia", "anom.jpg", "ANOM", "777", "rumah", "smp", "disabled");
+        $request = new StudentUpdate($student->getId(), "rahasia", "anom.jpg", "ANOM", "3d", "email", "bio", "777", "rumah", "smp", "disabled");
         $this->studentService->update($request);
+    }
+
+    function testUpdateDuplicateEmail() {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Email is already used");
+
+        $student = $this->studentRegistration()->getStudent();
+
+        $request = new StudentRegistration("bangkit.jpg", "BAS", "777", "jalan", "smk");
+        $response = $this->studentService->register($request, 2024, 1);
+        
+        
+        $request = new StudentUpdate($response->getStudent()->getId(), "rahasia", "anom.jpg", "ANOM", "3d", "email", "bio", "777", "rumah", "smp", "disabled");
+        $this->studentService->update($request);
+
+        $request2 = new StudentUpdate($student->getId(), "rahasia", "photo", "ful", "3d", "email", "bio", "000", "jalan", "smk", "enabled");
+        $this->studentService->update($request2);
     }
 
     function testLoginSuccess() {
@@ -199,7 +227,8 @@ class StudentServiceImplTest extends TestCase {
     function testLoginAfterUpdatePassword() {
         $student = $this->studentRegistration()->getStudent();
 
-        $request = new StudentUpdate($student->getId(), "rahasia", $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus());
+        $request = new StudentUpdate($student->getId(), "rahasia", $student->getPhoto(), $student->getFullname(),
+            $student->getSpecialist(), $student->getEmail(), $student->getBio(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus());
         $this->studentService->update($request);
 
         $login = new StudentLogin($student->getId(), "rahasia");

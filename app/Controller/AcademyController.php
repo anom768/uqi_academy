@@ -16,8 +16,8 @@ use Exception;
 
 class AcademyController {
 
-    private StudentService $studentService;
     private SessionService $sessionService;
+    private StudentService $studentService;
 
     public function __construct()
     {
@@ -25,8 +25,9 @@ class AcademyController {
         $sessionRepository = new SessionRepositoryImpl($connection);
         $studentRepository = new StudentRepositoryImpl($connection);
         $batchRepository = new BatchRepositoryImpl($connection);
-        $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
+
         $this->sessionService = new SessionServiceImpl($sessionRepository, $studentRepository);
+        $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
     }
 
     public function getLogin() {
@@ -44,6 +45,10 @@ class AcademyController {
             ]);
         } else {
             // ke student
+            View::render("Student/dashboard", [
+                "title" => "UQI Academy | Student Dashboard",
+                "student" => $student
+            ]);
         }
     }
 
@@ -60,31 +65,6 @@ class AcademyController {
                 "error" => $exception->getMessage()
             ]);
         }
-    }
-
-    public function getRegister() {
-        View::render("Admin/registration", [
-            "title" => "UQI Academy | Student Registration"
-        ]);
-    }
-
-    public function postRegister() {
-        // $request = new StudentRegistration($_POST[""]);
-    }
-
-    public function getProfile(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
-
-        if ($student != null) {
-            View::render("Admin/detail_profile", [
-                "title" => "UQI Academy | Profile Detail",
-                "student" => $student
-            ]);
-        } else {
-            View::redirect("/");
-        }
-        
     }
 
     public function logout()

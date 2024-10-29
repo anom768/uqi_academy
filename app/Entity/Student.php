@@ -9,18 +9,28 @@ class Student {
     private string $temp_password;
     private string $photo;
     private string $fullname;
+    private ?string $specialist;
+    private ?string $email;
+    private ?string $website;
+    private ?string $bio;
     private string $phone;
     private string $address;
     private string $school;
     private string $status;
 
-    public function __construct(string $id, string $password, string $temp_password, string $photo, string $fullname, string $phone, string $address, string $school, string $status)
+    public function __construct(string $id, string $password, string $temp_password, 
+        string $photo, string $fullname, ?string $specialist, ?string $email, ?string $website, 
+        ?string $bio, string $phone, string $address, string $school, string $status)
     {
         $this->id = $id;
         $this->password = $password;
         $this->temp_password = $temp_password;
         $this->photo = $photo;
         $this->fullname = $fullname;
+        $this->specialist = $specialist;
+        $this->email = $email;
+        $this->website = $website;
+        $this->bio = $bio;
         $this->phone = $phone;
         $this->address = $address;
         $this->school = $school;
@@ -62,7 +72,6 @@ class Student {
         return $this->photo;
     }
 
-    // Setter untuk photo
     public function setPhoto(string $photo): void {
         $this->photo = $photo;
     }
@@ -72,9 +81,40 @@ class Student {
         return $this->fullname;
     }
 
-    // Setter untuk fullname
     public function setFullname(string $fullname): void {
         $this->fullname = $fullname;
+    }
+
+    public function getSpecialist(): ?string {
+        return $this->specialist;
+    }
+
+    public function setSpecialist(?string $specialist): void {
+        $this->specialist = $specialist;
+    }
+
+    public function getEmail(): ?string {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void {
+        $this->email = $email;
+    }
+
+    public function getWebsite(): ?string {
+        return $this->website;
+    }
+
+    public function setWebsite(?string $website): void {
+        $this->website = $website;
+    }
+
+    public function getBio(): ?string {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): void {
+        $this->bio = $bio;
     }
 
     // Getter untuk phone
@@ -82,8 +122,7 @@ class Student {
         return $this->phone;
     }
 
-    // Setter untuk phone
-    public function setPhone(string $phone): void {
+    public function setPone(string $phone): void {
         $this->phone = $phone;
     }
 
@@ -92,7 +131,6 @@ class Student {
         return $this->address;
     }
 
-    // Setter untuk address
     public function setAddress(string $address): void {
         $this->address = $address;
     }
@@ -102,7 +140,6 @@ class Student {
         return $this->school;
     }
 
-    // Setter untuk school
     public function setSchool(string $school): void {
         $this->school = $school;
     }
@@ -112,7 +149,6 @@ class Student {
         return $this->status;
     }
 
-    // Setter untuk status
     public function setStatus(string $status): void {
         $this->status = $status;
     }

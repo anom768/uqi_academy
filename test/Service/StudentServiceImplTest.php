@@ -13,6 +13,7 @@ use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepositoryImpl;
 use Exception;
@@ -34,7 +35,9 @@ class StudentServiceImplTest extends TestCase {
         $this->batchRepository = new BatchRepositoryImpl($connection);
         $this->sessionRepository = new SessionRepositoryImpl($connection);
         $this->studentService = new StudentServiceImpl($this->studentRepository, $this->batchRepository);
+        $socialMediaRepository = new SocialMediaRepositoryImpl($connection);
 
+        $socialMediaRepository->deleteAll();
         $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
         $this->portofolioRepository->deleteAll();
@@ -153,7 +156,7 @@ class StudentServiceImplTest extends TestCase {
 
     function testUpdateDuplicatePhone() {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Number phone is already used");
+        $this->expectExceptionMessage("Phone is already used");
 
         $request = new StudentRegistration("bangkit.jpg", "BAS", "777", "jalan", "smk");
         $this->studentService->register($request, 2024, 1);

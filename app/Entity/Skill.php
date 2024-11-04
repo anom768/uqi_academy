@@ -17,6 +17,10 @@ class Skill {
         $this->score = $score;
     }
 
+    public function setId(int $id) :void {
+        $this->id = $id;
+    }
+
     // Getter untuk id
     public function getId(): int {
         return $this->id;

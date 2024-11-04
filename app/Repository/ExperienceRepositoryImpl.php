@@ -15,8 +15,9 @@ class ExperienceRepositoryImpl implements ExperiencesRepository {
 
     public function add(Experience $experience): Experience
     {
+        var_dump($experience);
         $statement = $this->connection->prepare("INSERT INTO experiences (id_student, type, company, entry_date, end_date, description) VALUES (?,?,?,?,?,?)");
-        $statement->execute([$experience->getIdStudent(), $experience->getType(), $experience->getCompany(), $experience->getEndDate(), $experience->getDescription()]);
+        $statement->execute([$experience->getIdStudent(), $experience->getType(), $experience->getCompany(), $experience->getEntryDate(), $experience->getEndDate(), $experience->getDescription()]);
 
         $experience->setId($this->connection->lastInsertId());
         return $experience;

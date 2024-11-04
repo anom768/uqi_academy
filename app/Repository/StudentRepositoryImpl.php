@@ -140,6 +140,27 @@ class StudentRepositoryImpl implements StudentRepository {
         return $newStudent;
     }
 
+    function updateProfile(Student $newStudent): Student
+    {
+        $statement = $this->connection->prepare("UPDATE students SET photo = ?, fullname = ?, specialist = ?, email = ?, bio = ?, phone = ?, address = ?, school = ? WHERE id = ?");
+        $statement->execute([$newStudent->getPhoto(), $newStudent->getFullname(), $newStudent->getSpecialist(), $newStudent->getEmail(),
+        $newStudent->getBio(), $newStudent->getPhone(), $newStudent->getAddress(), $newStudent->getSchool(), $newStudent->getId()]);
+
+        $student = $this->getByID($newStudent->getId());
+        
+        return $student;
+    }
+
+    function updatePassword(string $id, string $password): Student
+    {
+        $statement = $this->connection->prepare("UPDATE students SET password = ?, temp_password = ? WHERE id = ?");
+        $statement->execute([$password, "", $id]);
+
+        $student = $this->getByID($id);
+        
+        return $student;
+    }
+
     function deleteAll(): void
     {
         $statement = $this->connection->prepare("DELETE FROM students");

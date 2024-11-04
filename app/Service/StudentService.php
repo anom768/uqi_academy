@@ -7,6 +7,8 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
 
 interface StudentService {
 
@@ -17,5 +19,7 @@ interface StudentService {
     function getByEmail(string $email) :StudentResponse;
     function getAll() :StudentArrayResponse;
     function update(StudentUpdate $request) :StudentResponse;
+    function updateProfile(StudentUpdateProfile $request) :StudentResponse;
+    function updatePassword(StudentUpdatePassword $request) :StudentResponse;
 
 }

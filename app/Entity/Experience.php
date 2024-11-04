@@ -10,8 +10,8 @@ class Experience {
     private string $id_student;
     private string $type;
     private string $company;
-    private DateTime $entry_date;
-    private DateTime $end_date;
+    private string $entry_date;
+    private string $end_date;
     private string $description;
 
     // Constructor
@@ -52,12 +52,12 @@ class Experience {
 
     // Getter untuk year
     public function getEntryDate(): string {
-        return $this->entry_date->format('d-m-Y');
+        return $this->entry_date;
     }
 
     // Getter untuk year
     public function getEndDate(): string {
-        return $this->end_date->format('d-m-Y');
+        return $this->end_date;
     }
 
     // Getter untuk registration_date

@@ -3,8 +3,6 @@
 namespace com\bangkitanomsedhayu\uqi\academy\Repository;
 
 use com\bangkitanomsedhayu\uqi\academy\Entity\Education;
-use com\bangkitanomsedhayu\uqi\academy\Entity\Language;
-use com\bangkitanomsedhayu\uqi\academy\Entity\Skill;
 
 class EducationRepositoryImpl implements EducationRepository {
 
@@ -17,7 +15,7 @@ class EducationRepositoryImpl implements EducationRepository {
 
     public function add(Education $education): Education
     {
-        $statement = $this->connection->prepare("INSERT INTO education (id_student, school, entry_year, graduate_year) VALUES (?,?,?,?)");
+        $statement = $this->connection->prepare("INSERT INTO educations (id_student, school, entry_year, graduate_year) VALUES (?,?,?,?)");
         $statement->execute([$education->getIdStudent(), $education->getSchool(), $education->getEntryYear(), $education->getGraduateYear()]);
 
         $education->setId($this->connection->lastInsertId());

@@ -65,7 +65,7 @@ CREATE TABLE sessions (
  CREATE TABLE languages (
     id INT NOT NULL AUTO_INCREMENT,
     id_student VARCHAR(10) NOT NULL,
-    languages VARCHAR(255),
+    language VARCHAR(255),
     score INT DEFAULT 0,
     PRIMARY KEY (id),
     CONSTRAINT fk_student_languages FOREIGN KEY (id_student) REFERENCES students(id)
@@ -86,8 +86,8 @@ CREATE TABLE sessions (
     id_student VARCHAR(10) NOT NULL,
     type VARCHAR(20),
     company VARCHAR(255) NOT NULL,
-    entry_date INT NOT NULL,
-    end_date INT NOT NULL,
+    entry_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     description TEXT,
     PRIMARY KEY (id),
     CONSTRAINT fk_student_experiences FOREIGN KEY (id_student) REFERENCES students(id)

@@ -8,6 +8,8 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Batch;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
 use com\bangkitanomsedhayu\uqi\academy\Helper\ServiceHelper;
@@ -98,6 +100,39 @@ class StudentServiceImpl implements StudentService {
             $this->studentRepository->update($student);
             Database::commitTransaction();
             return new StudentResponse($student);
+        } catch (Exception $exception) {
+            Database::rollbackTransaction();
+            throw $exception;
+        }
+    }
+
+    public function updateProfile(StudentUpdateProfile $request): StudentResponse
+    {
+        try {
+            Database::beginTransaction();
+            ServiceHelper::updateProfileCheck($request, $this->studentRepository);
+            $newStudent = new Student($request->getId(), "", "", $request->getPhoto(), $request->getFullname(), $request->getSpecialist(),
+                $request->getEmail(), "", $request->getBio(), $request->getPhone(), $request->getAddress(), $request->getSchool(), "");
+            $student = $this->studentRepository->updateProfile($newStudent);
+            $response = new StudentResponse($student);
+            Database::commitTransaction();
+            return $response;
+        } catch (Exception $exception) {
+            Database::rollbackTransaction();
+            throw $exception;
+        }
+    }
+
+    public function updatePassword(StudentUpdatePassword $request) : StudentResponse {
+        ServiceHelper::updatePasswordCheck($request, $this->studentRepository);
+
+        try {
+            Database::beginTransaction();
+            $password = ServiceHelper::hashPassword($request->getPassword());
+            $student = $this->studentRepository->updatePassword($request->getId(), $password);
+            $response = new StudentResponse($student);
+            Database::commitTransaction();
+            return $response;
         } catch (Exception $exception) {
             Database::rollbackTransaction();
             throw $exception;

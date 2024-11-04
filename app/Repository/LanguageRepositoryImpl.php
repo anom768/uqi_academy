@@ -16,7 +16,7 @@ class LanguageRepositoryImpl implements LanguageRepository {
 
     public function add(Language $language): Language
     {
-        $statement = $this->connection->prepare("INSERT INTO language (id_student, language, score) VALUES (?,?,?)");
+        $statement = $this->connection->prepare("INSERT INTO languages (id_student, language, score) VALUES (?,?,?)");
         $statement->execute([$language->getIdStudent(), $language->getLanguage(), $language->getScore()]);
 
         $language->setId($this->connection->lastInsertId());

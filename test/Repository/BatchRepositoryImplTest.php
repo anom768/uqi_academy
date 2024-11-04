@@ -19,7 +19,17 @@ class BatchRepositoryImplTest extends TestCase {
         $this->studentRepository = new StudentRepositoryImpl($connection);
         $this->batchRepository = new BatchRepositoryImpl($connection);
         $this->sessionRepository = new SessionRepositoryImpl($connection);
+        $educationRepository = new EducationRepositoryImpl($connection);
+        $experienceRepository = new ExperienceRepositoryImpl($connection);
+        $languageRepository = new LanguageRepositoryImpl($connection);
+        $skillRepository = new SkillRepositoryImpl($connection);
+        $socialMediaRepository = new SocialMediaRepositoryImpl($connection);
 
+        $socialMediaRepository->deleteAll();
+        $skillRepository->deleteAll();
+        $languageRepository->deleteAll();
+        $experienceRepository->deleteAll();
+        $educationRepository->deleteAll();
         $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
         $this->studentRepository->deleteAll();
@@ -27,7 +37,7 @@ class BatchRepositoryImplTest extends TestCase {
 
     private function addStudent() : Student {
         $student = $this->studentRepository->add(
-            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "089", "jalan", "smk", "enabled")
+            new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "", "", "", "", "089", "jalan", "smk", "enabled")
         );
         return $student;
     }

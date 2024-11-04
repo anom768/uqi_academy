@@ -70,29 +70,29 @@ class AdminController {
         // $request = new StudentRegistration($_POST[""]);
     }
 
-    public function getProfile(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
-        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
-        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
-        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
-        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
-        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+    // public function getProfile(string $id1, string $id2) {
+    //     $id = $id1."-".$id2;
+    //     $student = $this->studentService->getByID($id)->getStudent();
+    //     $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
+    //     $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
+    //     $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
+    //     $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
+    //     $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
 
-        if ($student != null) {
-            View::render("Student/profile", [
-                "title" => "UQI Academy | Student Profile",
-                "student" => $student,
-                "socialMedias" => $socialMedias,
-                "skills" => $skills,
-                "languages" => $languages,
-                "educations" => $educations,
-                "experiences" => $experiences,
-            ]);
-        } else {
-            View::redirect("/");
-        }
+    //     if ($student != null) {
+    //         View::render("Student/profile", [
+    //             "title" => "UQI Academy | Student Profile",
+    //             "student" => $student,
+    //             "socialMedias" => $socialMedias,
+    //             "skills" => $skills,
+    //             "languages" => $languages,
+    //             "educations" => $educations,
+    //             "experiences" => $experiences,
+    //         ]);
+    //     } else {
+    //         View::redirect("/");
+    //     }
         
-    }
+    // }
 
 }

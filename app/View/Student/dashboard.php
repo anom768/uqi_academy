@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -27,10 +28,11 @@
         }
 
         .profile-img {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: auto;
             object-fit: cover;
-            border-radius: 50%;
+            border-radius: 10px;
+            /* Sedikit rounding di ujung */
             margin-bottom: 10px;
         }
 
@@ -80,18 +82,19 @@
             <div class="row">
                 <!-- Sidebar -->
                 <div class="col-md-4 bg-dark-blue text-white text-center p-4 rounded-start">
+                    </br>
                     <img src="/img/uqi/academy/2024/1/<?= $model["student"]->getPhoto() ?>" alt="Profile Picture" class="profile-img">
                     <h2 class="mb-3"><?= $model["student"]->getFullname() ?></h2>
-                    <p>Bioengineering Student</p>
+                    <p><?= $model["student"]->getSpecialist() ?? "(edit your specialist)" ?></p>
 
                     <!-- Contact Info -->
                     <div class="mt-4 text-start">
                         <h5 class="fw-bold">Contact</h5>
                         <hr class="divider">
-                        <p><i class="bi bi-telephone-fill"></i> 000-000-0000</p>
-                        <p><i class="bi bi-envelope-fill"></i> jane.smith@gmail.com</p>
-                        <p><i class="bi bi-geo-alt-fill"></i> London, GB</p>
-                        <p><i class="bi bi-globe"></i> janesmith.com</p>
+                        <p><i class="bi bi-telephone-fill"></i> <?= $model["student"]->getPhone() ?></p>
+                        <p><i class="bi bi-envelope-fill"></i> <?= $model["student"]->getEmail() ?? "(edit your email)" ?></p>
+                        <p><i class="bi bi-geo-alt-fill"></i> <?= $model["student"]->getAddress() ?></p>
+                        <p><i class="bi bi-globe"></i> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></p>
                     </div>
 
                     <!-- Skills -->
@@ -99,17 +102,28 @@
                         <h5 class="fw-bold">Skills</h5>
                         <hr class="divider">
                         <ul class="list-unstyled">
-                            <li>MS Word, MS Excel</li>
-                            <li>PTC Creo, Catia</li>
-                            <li>Python, Java, CSS</li>
+                            <?php for ($i = 0; $i < sizeof($model["skills"]); $i++) { ?>
+                                <li class="d-flex justify-content-between">
+                                    <span><?= $model["skills"][$i]->getSkill() ?></span>
+                                    <span><?= $model["skills"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
 
+
                     <!-- Languages -->
                     <div class="mt-4 text-start">
-                        <h5 class="fw-bold">Languages</h5>
+                    <h5 class="fw-bold">Languages</h5>
                         <hr class="divider">
-                        <p>English, German, Spanish</p>
+                        <ul class="list-unstyled">
+                            <?php for ($i = 0; $i < sizeof($model["languages"]); $i++) { ?>
+                                <li class="d-flex justify-content-between">
+                                    <span><?= $model["languages"][$i]->getLanguage() ?></span>
+                                    <span><?= $model["languages"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
+                                </li>
+                            <?php } ?>
+                        </ul>
                     </div>
                 </div>
 
@@ -117,68 +131,47 @@
                 <div class="col-md-8 bg-light-blue p-5 rounded-end">
                     <!-- Summary -->
                     <div class="mb-4">
-                        <h5 class="section-title">Professional Summary</h5>
-                        <p>Motivated and results-oriented Bioengineering graduate with experience in robotics, economics, and business management. Aiming to leverage my technical and analytical skills in a dynamic, forward-thinking organization.</p>
+                        <h5 class="section-title">Biography</h5>
+                        <p><?= $model["student"]->getBio() ?></p>
                     </div>
 
                     <!-- Education Section -->
                     <div class="mb-4">
-                        <h5 class="section-title">Education</h5>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="fw-bold mb-1">M.Sc. Bioengineering</h6>
-                                <p class="mb-0">Harvard University, Cambridge, MA</p>
-                                <small>Clubs: Robotics Society, Business Club</small>
+                        <h5 class="section-title">Educations</h5>
+                        <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1"><?= $model["educations"][$i]->getSchool() ?></h6>
+                                    <!-- <p class="mb-0">Harvard University, Cambridge, MA</p>
+                                    <small>Clubs: Robotics Society, Business Club</small> -->
+                                </div>
+                                <small><?= $model["educations"][$i]->getEntryYear() ?> - <?= $model["educations"][$i]->getGraduateYear() ?></small>
                             </div>
-                            <small>2014 - Present</small>
-                        </div>
-                        <hr class="divider">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="fw-bold mb-1">B.A. Applied Economics</h6>
-                                <p class="mb-0">Yale University, New Haven, CT</p>
-                                <small>Graduated Summa Cum Laude</small>
-                            </div>
-                            <small>2010 - 2014</small>
-                        </div>
+                            <hr class="divider">
+                        <?php } ?>
                     </div>
 
                     <!-- Experience Section -->
                     <div>
-                        <h5 class="section-title">Experience</h5>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="fw-bold mb-1">Intern</h6>
-                                <p class="mb-0">Tesla Inc., Fremont, CA</p>
-                                <small>Contributed to team projects on sustainable engineering solutions.</small>
+                        <h5 class="section-title">Experiences</h5>
+                        <?php for($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1"><?= $model["experiences"][$i]->getType() ?></h6>
+                                    <p class="mb-0"><?= $model["experiences"][$i]->getCompany() ?></p>
+                                    <small><?= $model["experiences"][$i]->getDescription() ?></small>
+                                </div>
+                                <small><?= $model["experiences"][$i]->getEntryDate() ?> - <?= $model["experiences"][$i]->getEndDate() ?></small>
                             </div>
-                            <small>2018 - Present</small>
-                        </div>
-                        <hr class="divider">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="fw-bold mb-1">Intern</h6>
-                                <p class="mb-0">Boeing, Pleasanton, CA</p>
-                                <small>Worked on component testing and analysis.</small>
-                            </div>
-                            <small>2016 - 2018</small>
-                        </div>
-                        <hr class="divider">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="fw-bold mb-1">Intern</h6>
-                                <p class="mb-0">Audi Palo Alto, Palo Alto, CA</p>
-                                <small>Assisted in engineering design projects.</small>
-                            </div>
-                            <small>2014 - 2016</small>
-                        </div>
+                            <hr class="divider">
+                        <?php } ?>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="text-center mb-5">
-            <button onclick="generatePDF()" class="btn btn-primary">Download as PDF</button>
+            <!-- <button onclick="generatePDF()" class="btn btn-primary">Download as PDF</button> -->
         </div>
 
         <script>
@@ -192,7 +185,7 @@
                         quality: 0.98
                     },
                     html2canvas: {
-                        scale: 2
+                        scale: 3
                     },
                     jsPDF: {
                         unit: 'in',

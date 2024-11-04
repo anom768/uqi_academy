@@ -9,6 +9,8 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
+use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
 use Exception;
 
@@ -45,15 +47,9 @@ class ServiceHelper {
                 throw new Exception("All data is required");
         }
 
-        $student = $studentRepository->getByPhone($request->getPhone());
-        if ($student != null && $student->getId() != $request->getId()) {
-            throw new Exception("Number phone is already used");
-        }
+        self::phoneDuplicateCheck($request->getId(), $request->getPhone(), $studentRepository);
 
-        $student = $studentRepository->getByEmail($request->getEmail());
-        if ($student != null && $student->getId() != $request->getId()) {
-            throw new Exception("Email is already used");
-        }
+        self::emailDuplicateCheck($request->getId(), $request->getEmail(), $studentRepository);
     }
 
     public static function generateIDStudent(int $year, int $batch, StudentRepository $studentRepository) :string {
@@ -99,14 +95,71 @@ class ServiceHelper {
     }
 
     public static function educationAddCheck(EducationRequest $request) {
-        if (trim($request->getSchool()) == "" || $request->getSchool() == null) {
-            throw new Exception("School name is required");
+        if (trim($request->getSchool()) == "" || $request->getSchool() == null ||
+            trim($request->getEntryYear()) == "" || $request->getEntryYear() == null ||
+            trim($request->getGraduateYear()) == "" || $request->getGraduateYear() == null) {
+            throw new Exception("All data is required");
+        }
+
+        if (strlen($request->getEntryYear()) < 4 || strlen($request->getEntryYear()) > 4 ||
+            strlen($request->getGraduateYear()) < 4 || strlen($request->getGraduateYear()) > 4 ||
+            $request->getEntryYear() < 2000 || $request->getGraduateYear() < 2000 ||
+            $request->getEntryYear() > date("Y") || $request->getEntryYear() >= $request->getGraduateYear()) {
+                throw new Exception("Entry date or graduate date is invalid");
         }
     }
 
     public static function experienceAddCheck(ExperienceRequest $request) {
-        if (trim($request->getCompany()) == "" || $request->getCompany() == null) {
-            throw new Exception("Company name is required");
+        if (trim($request->getCompany()) == "" || $request->getCompany() == null ||
+            trim($request->getType()) == "" || $request->getType() == null ||
+            trim($request->getEntryDate()) == "" || $request->getEntryDate() == null ||
+            trim($request->getEndDate()) == "" || $request->getEndDate() == null) {
+            throw new Exception("All data is required");
+        }
+
+    }
+
+    public static function updateProfileCheck(StudentUpdateProfile $request, StudentRepository $studentRepository) {
+        if (trim($request->getFullname()) == "" || trim($request->getSpecialist()) == "" || trim($request->getEmail()) == "" ||
+            trim($request->getBio()) == "" || trim($request->getPhone()) == "" || trim($request->getAddress()) == "" || 
+            trim($request->getSchool()) == "" || $request->getFullname() == null || $request->getSpecialist() == null ||
+            $request->getEmail() == null || $request->getBio() == null || $request->getPhone() == null || $request->getAddress() == null ||
+            $request->getSchool() == null) {
+                throw new Exception("All data is required");
+        }
+
+        self::phoneDuplicateCheck($request->getId(), $request->getPhone(), $studentRepository);
+
+        self::emailDuplicateCheck($request->getId(), $request->getEmail(), $studentRepository);
+
+    }
+
+    public static function emailDuplicateCheck(string $id, string $email, StudentRepository $studentRepository) {
+        $student = $studentRepository->getByEmail($email);
+        if ($student != null && $student->getId() != $id) {
+            throw new Exception("Email is already used");
+        }
+    }
+
+    public static function phoneDuplicateCheck(string $id, string $phone, StudentRepository $studentRepository) {
+        $student = $studentRepository->getByPhone($phone);
+        if ($student != null && $student->getId() != $id) {
+            throw new Exception("Phone is already used");
+        }
+    }
+
+    public static function updatePasswordCheck(StudentUpdatePassword $request, StudentRepository $studentRepository) {
+        if (trim($request->getPassword()) == "" || trim($request->getConfirmPassword()) == "" ||
+            $request->getPassword() == null || $request->getConfirmPassword() == null) {
+                throw new Exception("All data is required");
+        }
+
+        if (strlen($request->getPassword()) < 8) {
+            throw new Exception("password must have minimum 8 characters");
+        }
+
+        if ($request->getPassword() != $request->getConfirmPassword()) {
+            throw new Exception("password and confirm password must same");
         }
     }
 

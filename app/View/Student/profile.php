@@ -37,12 +37,13 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav></br>
     <div class="container col-xl-10 col-xl-8 px-0 py-5">
-        <?php if (isset($model['success'])) { ?>
+        <?php session_start();
+        if (isset($_SESSION['success'])) { ?>
             <div class="row">
                 <div class="alert alert-success" role="alert">
-                    <?= $model['success'] ?>
+                    <?= $_SESSION['success'] ?>
                 </div>
             </div>
         <?php } elseif (isset($model['error'])) { ?>
@@ -51,11 +52,12 @@
                     <?= $model['error'] ?>
                 </div>
             </div>
-        <?php } ?>
+        <?php }
+        unset($_SESSION["success"]); ?>
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Profile</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/profile/<?= $model["student"]->getId() ?>">
                     <div class="form-floating mb-3">
                         <input value="<?= $model["student"]->getPhoto() ?? "" ?>" name="photo" type="text" class="form-control" id="photo" placeholder="photo">
                         <label for="photo">Photo*</label>
@@ -111,13 +113,13 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Update Password</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/password/<?= $model["student"]->getId() ?>">
                     <div class="form-floating mb-3">
-                        <input name="password" type="text" class="form-control" id="password" placeholder="password">
+                        <input name="password" type="password" class="form-control" id="password" placeholder="password">
                         <label for="password">Password*</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input name="confirmPassword" type="text" class="form-control" id="confirmPassword" placeholder="confirmPassword" disabled>
+                        <input name="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="confirmPassword">
                         <label for="confirmPassword">Confirm Password*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Update Password</button>
@@ -127,24 +129,24 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Education</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/education/<?= $model["student"]->getId() ?>">
                     <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input name="education<?= $i ?>" type="text" class="form-control" id="education<?= $i ?>" placeholder="education">
-                                    <label for="education<?= $i ?>">Education*</label>
+                                    <input value="<?= $model["educations"][$i]->getSchool() ?>" name="school<?= $i ?>" type="text" class="form-control" id="school<?= $i ?>" placeholder="school">
+                                    <label for="school<?= $i ?>">School*</label>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
+                                    <input value="<?= $model["educations"][$i]->getEntryYear() ?>" name="entryDate<?= $i ?>" type="number" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
                                     <label for="entryDate<?= $i ?>">Entry Date*</label>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input name="graduateDate<?= $i ?>" type="date" class="form-control" id="graduateDate<?= $i ?>" placeholder="graduateDate">
+                                    <input value="<?= $model["educations"][$i]->getGraduateYear() ?>" name="graduateDate<?= $i ?>" type="number" class="form-control" id="graduateDate<?= $i ?>" placeholder="graduateDate">
                                     <label for="graduateDate<?= $i ?>">Graduate Date*</label>
                                 </div>
                             </div>
@@ -153,20 +155,20 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <div class="form-floating">
-                                <input name="education<?= $i ?>" type="text" class="form-control" id="education<?= $i ?>" placeholder="education">
-                                <label for="education<?= $i ?>">Education*</label>
+                                <input name="school" type="text" class="form-control" id="school" placeholder="school">
+                                <label for="school">School*</label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating">
-                                <input name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
-                                <label for="entryDate<?= $i ?>">Entry Date*</label>
+                                <input name="entryDate" type="number" class="form-control" id="entryDate" placeholder="entryDate">
+                                <label for="entryDate">Entry Date*</label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating">
-                                <input name="graduateDate<?= $i ?>" type="date" class="form-control" id="graduateDate<?= $i ?>" placeholder="graduateDate">
-                                <label for="graduateDate<?= $i ?>">Graduate Date*</label>
+                                <input name="graduateDate" type="number" class="form-control" id="graduateDate" placeholder="graduateDate">
+                                <label for="graduateDate">Graduate Date*</label>
                             </div>
                         </div>
                     </div>
@@ -177,58 +179,62 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Experience</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/experience/<?= $model["student"]->getId() ?>">
                     <?php for ($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input name="company<?= $i ?>" type="text" class="form-control" id="company<?= $i ?>" placeholder="company">
+                                    <input value="<?= $model["experiences"][$i]->getCompany() ?>" name="company<?= $i ?>" type="text" class="form-control" id="company<?= $i ?>" placeholder="company">
                                     <label for="company<?= $i ?>">Company*</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input name="type<?= $i ?>" type="text" class="form-control" id="type<?= $i ?>" placeholder="type">
+                                    <input value="<?= $model["experiences"][$i]->getType() ?>" name="type<?= $i ?>" type="text" class="form-control" id="type<?= $i ?>" placeholder="type">
                                     <label for="type<?= $i ?>">Type*</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
+                                    <input value="<?= $model["experiences"][$i]->getEntryDate() ?>" name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
                                     <label for="entryDate<?= $i ?>">Entry Date*</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-floating">
-                                    <input name="endDate<?= $i ?>" type="date" class="form-control" id="endDate<?= $i ?>" placeholder="endDate">
+                                    <input value="<?= $model["experiences"][$i]->getEndDate() ?>" name="endDate<?= $i ?>" type="date" class="form-control" id="endDate<?= $i ?>" placeholder="endDate">
                                     <label for="endDate<?= $i ?>">End Date*</label>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-floating mb-3">
+                            <input value="<?= $model["experiences"][$i]->getDescription() ?>" name="description<?= $i ?>" type="text" class="form-control" id="description<?= $i ?>" placeholder="description">
+                        <label for="description<?= $i ?>">Description*</label>
+                    </div>
                     <?php } ?>
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="company<?= $i ?>" type="text" class="form-control" id="company<?= $i ?>" placeholder="company">
-                                <label for="company<?= $i ?>">Company*</label>
+                                <input name="company" type="text" class="form-control" id="company" placeholder="company">
+                                <label for="company">Company*</label>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="type<?= $i ?>" type="text" class="form-control" id="type<?= $i ?>" placeholder="type">
-                                <label for="type<?= $i ?>">Type*</label>
+                                <input name="type" type="text" class="form-control" id="type" placeholder="type">
+                                <label for="type">Type*</label>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
-                                <label for="entryDate<?= $i ?>">Entry Date*</label>
+                                <input name="entryDate" type="date" class="form-control" id="entryDate" placeholder="entryDate">
+                                <label for="entryDate">Entry Date*</label>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="endDate<?= $i ?>" type="date" class="form-control" id="endDate<?= $i ?>" placeholder="endDate">
-                                <label for="endDate<?= $i ?>">End Date*</label>
+                                <input name="endDate" type="date" class="form-control" id="endDate" placeholder="endDate">
+                                <label for="endDate">End Date*</label>
                             </div>
                         </div>
                     </div>
@@ -243,18 +249,18 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Skill</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/skill/<?= $model["student"]->getId() ?>">
                     <?php for ($i = 0; $i < sizeof($model["skills"]); $i++) { ?>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input name="skill<?= $i ?>" type="text" class="form-control" id="skill<?= $i ?>" placeholder="Skill">
+                                    <input value="<?= $model["skills"][$i]->getSkill() ?>" name="skill<?= $i ?>" type="text" class="form-control" id="skill<?= $i ?>" placeholder="Skill">
                                     <label for="skill<?= $i ?>">Skill*</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
+                                    <input value="<?= $model["skills"][$i]->getScore() ?>" name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
                                     <label for="score<?= $i ?>">Score*</label>
                                 </div>
                             </div>
@@ -263,14 +269,14 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input name="skill<?= $i ?>" type="text" class="form-control" id="skill<?= $i ?>" placeholder="Skill">
-                                <label for="skill<?= $i ?>">Skill*</label>
+                                <input name="skill" type="text" class="form-control" id="skill" placeholder="Skill">
+                                <label for="skill">Skill*</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
-                                <label for="score<?= $i ?>">Score*</label>
+                                <input name="score" type="number" class="form-control" id="score" placeholder="Score">
+                                <label for="score">Score*</label>
                             </div>
                         </div>
                     </div>
@@ -281,18 +287,18 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Language</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="put" action="/student/<?= $model["student"]->getId() ?>">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/language/<?= $model["student"]->getId() ?>">
                     <?php for ($i = 0; $i < sizeof($model["languages"]); $i++) { ?>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input name="language<?= $i ?>" type="text" class="form-control" id="language<?= $i ?>" placeholder="language">
+                                    <input value="<?= $model["languages"][$i]->getLanguage() ?>" name="language<?= $i ?>" type="text" class="form-control" id="language<?= $i ?>" placeholder="language">
                                     <label for="language<?= $i ?>">Language*</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
+                                    <input value="<?= $model["languages"][$i]->getScore() ?>" name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
                                     <label for="score<?= $i ?>">Score*</label>
                                 </div>
                             </div>
@@ -301,14 +307,14 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input name="language<?= $i ?>" type="text" class="form-control" id="language<?= $i ?>" placeholder="language">
-                                <label for="language<?= $i ?>">Language*</label>
+                                <input name="language" type="text" class="form-control" id="language" placeholder="language">
+                                <label for="language">Language*</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
-                                <label for="score<?= $i ?>">Score*</label>
+                                <input name="score" type="number" class="form-control" id="score" placeholder="Score">
+                                <label for="score">Score*</label>
                             </div>
                         </div>
                     </div>

@@ -8,7 +8,8 @@ interface PortofolioRepository {
 
     function add(Portofolio $portofolio) :Portofolio;
     function getAll() :array;
-    function deleteByID(int $id) :void;
+    function getByIDStudent(string $id_student) :array;
+    function delete(string $id_student, string $portofolio) :void;
     function deleteAll() :void;
 
 }

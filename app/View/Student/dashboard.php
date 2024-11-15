@@ -44,6 +44,26 @@
             background-color: #1d3c5b;
             color: white;
         }
+
+        .card-media {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 100%;
+            /* Membuat card menjadi persegi dengan rasio 1:1 */
+        }
+
+        .media-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Memastikan gambar/video memenuhi area card */
+            border-radius: 0.25rem;
+            /* Tambahkan border-radius untuk gaya */
+        }
     </style>
 </head>
 
@@ -76,102 +96,123 @@
 
     <div class="container col-xl-10 col-xl-8 px-0 py-5">
         <div class="welcome-message text-center text-center py-5" style="margin-top: 56px;">
-            <h1 class="display-4 fw-bold">Welcome to UQI Academy Student Portal</h1>
+            <h5 class="display-4 fw-bold">Welcome to UQI Academy Student Portal</h1>
         </div>
         <div class="container my-5" id="cv-content">
-            <div class="row">
-                <!-- Sidebar -->
-                <div class="col-md-4 bg-dark-blue text-white text-center p-4 rounded-start">
-                    </br>
-                    <img src="/img/uqi/academy/2024/1/<?= $model["student"]->getPhoto() ?>" alt="Profile Picture" class="profile-img">
-                    <h2 class="mb-3"><?= $model["student"]->getFullname() ?></h2>
-                    <p><?= $model["student"]->getSpecialist() ?? "(edit your specialist)" ?></p>
+            <h1 class="section-title text-center">Student Profile</h5>
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-md-4 bg-dark-blue text-white text-center p-4 rounded-start">
+                        </br>
+                        <img src="/img/uqi/academy/2024/1/<?= $model["student"]->getId() . "/" . $model["student"]->getPhoto() ?>" alt="Profile Picture" class="profile-img">
+                        <h2 class="mb-3"><?= $model["student"]->getFullname() ?></h2>
+                        <p><?= $model["student"]->getSpecialist() ?? "(edit your specialist)" ?></p>
 
-                    <!-- Contact Info -->
-                    <div class="mt-4 text-start">
-                        <h5 class="fw-bold">Contact</h5>
-                        <hr class="divider">
-                        <p><i class="bi bi-telephone-fill"></i> <?= $model["student"]->getPhone() ?></p>
-                        <p><i class="bi bi-envelope-fill"></i> <?= $model["student"]->getEmail() ?? "(edit your email)" ?></p>
-                        <p><i class="bi bi-geo-alt-fill"></i> <?= $model["student"]->getAddress() ?></p>
-                        <p><i class="bi bi-globe"></i> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></p>
+                        <!-- Contact Info -->
+                        <div class="mt-4 text-start">
+                            <h5 class="fw-bold">Contact</h5>
+                            <hr class="divider">
+                            <p><i class="bi bi-telephone-fill"></i> <?= $model["student"]->getPhone() ?></p>
+                            <p><i class="bi bi-envelope-fill"></i> <?= $model["student"]->getEmail() ?? "(edit your email)" ?></p>
+                            <p><i class="bi bi-geo-alt-fill"></i> <?= $model["student"]->getAddress() ?></p>
+                            <p><i class="bi bi-globe"></i> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></p>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="mt-4 text-start">
+                            <h5 class="fw-bold">Skills</h5>
+                            <hr class="divider">
+                            <ul class="list-unstyled">
+                                <?php for ($i = 0; $i < sizeof($model["skills"]); $i++) { ?>
+                                    <li class="d-flex justify-content-between">
+                                        <span><?= $model["skills"][$i]->getSkill() ?></span>
+                                        <span><?= $model["skills"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                        <!-- Languages -->
+                        <div class="mt-4 text-start">
+                            <h5 class="fw-bold">Languages</h5>
+                            <hr class="divider">
+                            <ul class="list-unstyled">
+                                <?php for ($i = 0; $i < sizeof($model["languages"]); $i++) { ?>
+                                    <li class="d-flex justify-content-between">
+                                        <span><?= $model["languages"][$i]->getLanguage() ?></span>
+                                        <span><?= $model["languages"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>
                     </div>
 
-                    <!-- Skills -->
-                    <div class="mt-4 text-start">
-                        <h5 class="fw-bold">Skills</h5>
-                        <hr class="divider">
-                        <ul class="list-unstyled">
-                            <?php for ($i = 0; $i < sizeof($model["skills"]); $i++) { ?>
-                                <li class="d-flex justify-content-between">
-                                    <span><?= $model["skills"][$i]->getSkill() ?></span>
-                                    <span><?= $model["skills"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
+                    <!-- Main Content -->
+                    <div class="col-md-8 bg-light-blue p-5 rounded-end">
+                        <!-- Summary -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Biography</h5>
+                            <p><?= $model["student"]->getBio() ?></p>
+                        </div>
 
-
-                    <!-- Languages -->
-                    <div class="mt-4 text-start">
-                    <h5 class="fw-bold">Languages</h5>
-                        <hr class="divider">
-                        <ul class="list-unstyled">
-                            <?php for ($i = 0; $i < sizeof($model["languages"]); $i++) { ?>
-                                <li class="d-flex justify-content-between">
-                                    <span><?= $model["languages"][$i]->getLanguage() ?></span>
-                                    <span><?= $model["languages"][$i]->getScore() ?></span> <!-- Score untuk skill ini -->
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Main Content -->
-                <div class="col-md-8 bg-light-blue p-5 rounded-end">
-                    <!-- Summary -->
-                    <div class="mb-4">
-                        <h5 class="section-title">Biography</h5>
-                        <p><?= $model["student"]->getBio() ?></p>
-                    </div>
-
-                    <!-- Education Section -->
-                    <div class="mb-4">
-                        <h5 class="section-title">Educations</h5>
-                        <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="fw-bold mb-1"><?= $model["educations"][$i]->getSchool() ?></h6>
-                                    <!-- <p class="mb-0">Harvard University, Cambridge, MA</p>
+                        <!-- Education Section -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Educations</h5>
+                            <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="fw-bold mb-1"><?= $model["educations"][$i]->getSchool() ?></h6>
+                                        <!-- <p class="mb-0">Harvard University, Cambridge, MA</p>
                                     <small>Clubs: Robotics Society, Business Club</small> -->
+                                    </div>
+                                    <small><?= $model["educations"][$i]->getEntryYear() ?> - <?= $model["educations"][$i]->getGraduateYear() ?></small>
                                 </div>
-                                <small><?= $model["educations"][$i]->getEntryYear() ?> - <?= $model["educations"][$i]->getGraduateYear() ?></small>
-                            </div>
-                            <hr class="divider">
-                        <?php } ?>
-                    </div>
+                                <hr class="divider">
+                            <?php } ?>
+                        </div>
 
-                    <!-- Experience Section -->
-                    <div>
-                        <h5 class="section-title">Experiences</h5>
-                        <?php for($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="fw-bold mb-1"><?= $model["experiences"][$i]->getType() ?></h6>
-                                    <p class="mb-0"><?= $model["experiences"][$i]->getCompany() ?></p>
-                                    <small><?= $model["experiences"][$i]->getDescription() ?></small>
+                        <!-- Experience Section -->
+                        <div>
+                            <h5 class="section-title">Experiences</h5>
+                            <?php for ($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="fw-bold mb-1"><?= $model["experiences"][$i]->getType() ?></h6>
+                                        <p class="mb-0"><?= $model["experiences"][$i]->getCompany() ?></p>
+                                        <small><?= $model["experiences"][$i]->getDescription() ?></small>
+                                    </div>
+                                    <small><?= $model["experiences"][$i]->getEntryDate() ?> - <?= $model["experiences"][$i]->getEndDate() ?></small>
                                 </div>
-                                <small><?= $model["experiences"][$i]->getEntryDate() ?> - <?= $model["experiences"][$i]->getEndDate() ?></small>
-                            </div>
-                            <hr class="divider">
-                        <?php } ?>
+                                <hr class="divider">
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
 
-        <div class="text-center mb-5">
-            <!-- <button onclick="generatePDF()" class="btn btn-primary">Download as PDF</button> -->
+        <div class="container my-5">
+            <h5 class="section-title text-center">Portofolio</h5>
+            <div class="row">
+                <?php
+                for ($i = 0; $i < sizeof($model["portofolios"]); $i++) {
+                    if ($model["portofolios"][$i]->getType() == "image") { ?>
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="img/uqi/academy/2024/1/<?= $model["student"]->getId() ?>/portofolio/<?= $model["portofolios"][$i]->getPortofolioName() ?>" class="card-img-top" alt="Image <?= $i ?>">
+                            </div>
+                        </div>
+                    <?php } else if ($model["portofolios"][$i]->getType() == "video") { ?>
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <video class="card-img-top" controls>
+                                    <source src="img/uqi/academy/2024/1/<?= $model["student"]->getId() ?>/portofolio/<?= $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                <?php }
+                }
+                ?>
+            </div>
         </div>
 
         <script>

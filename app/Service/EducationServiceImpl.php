@@ -44,9 +44,9 @@ class EducationServiceImpl implements EducationService {
         return new EducationArrayResponse($this->educationRepository->getByIdStudent($id_student));
     }
 
-    public function delete(string $id_student, string $school)
+    public function delete(int $id)
     {
-        $this->educationRepository->delete($id_student, $school);
+        $this->educationRepository->delete($id);
     }
 
 }

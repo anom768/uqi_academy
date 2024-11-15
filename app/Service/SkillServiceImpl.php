@@ -50,9 +50,9 @@ class SkillServiceImpl implements SkillService {
         return new SkillArrayResponse($this->skillRepository->getByIdStudent($id_student));
     }
 
-    public function delete(string $id_student, string $skill)
+    public function delete(int $id)
     {
-        $this->skillRepository->delete($id_student, $skill);
+        $this->skillRepository->delete($id);
     }
 
 }

@@ -10,6 +10,6 @@ interface SkillService {
 
     function add(SkillRequest $request) :SkillResponse;
     function getByIdStudent(string $id_student) :SkillArrayResponse;
-    function delete(string $id_student, string $skill);
+    function delete(int $id);
 
 }

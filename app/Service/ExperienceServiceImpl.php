@@ -45,9 +45,9 @@ class ExperienceServiceImpl implements ExperienceService {
         return new ExperienceArrayResponse($this->experienceRepository->getByIdStudent($id_student));
     }
 
-    public function delete(string $id_student, string $company)
+    public function delete(int $id)
     {
-        $this->experienceRepository->delete($id_student, $company);
+        $this->experienceRepository->delete($id);
     }
 
 }

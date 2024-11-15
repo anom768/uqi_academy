@@ -41,10 +41,10 @@ class SkillRepositoryImpl implements SkillRepository {
         }
     }
 
-    public function delete(string $id_student, string $skill): void
+    public function delete(int $id): void
     {
-        $statement = $this->connection->prepare("DELETE FROM skills WHERE id_student = ? AND skill = ?");
-        $statement->execute([$id_student, $skill]);
+        $statement = $this->connection->prepare("DELETE FROM skills WHERE id = ?");
+        $statement->execute([$id]);
     }
 
     public function deleteAll(): void

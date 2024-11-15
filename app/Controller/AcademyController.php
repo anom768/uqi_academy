@@ -9,6 +9,7 @@ use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\ExperienceRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\LanguageRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
@@ -19,6 +20,8 @@ use com\bangkitanomsedhayu\uqi\academy\Service\ExperienceService;
 use com\bangkitanomsedhayu\uqi\academy\Service\ExperienceServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\LanguageService;
 use com\bangkitanomsedhayu\uqi\academy\Service\LanguageServiceImpl;
+use com\bangkitanomsedhayu\uqi\academy\Service\PortofolioService;
+use com\bangkitanomsedhayu\uqi\academy\Service\PortofolioServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SessionService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SessionServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SkillService;
@@ -38,6 +41,7 @@ class AcademyController {
     private LanguageService $languageService;
     private EducationService $educationService;
     private ExperienceService $experienceService;
+    private PortofolioService $portofolioService;
 
     public function __construct()
     {
@@ -50,7 +54,9 @@ class AcademyController {
         $languageRepository = new LanguageRepositoryImpl($connection);
         $educationRepository = new EducationRepositoryImpl($connection);
         $experienceRepository = new ExperienceRepositoryImpl($connection);
+        $portofolioRepository = new PortofolioRepositoryImpl($connection);
         
+        $this->portofolioService = new PortofolioServiceImpl($portofolioRepository);
         $this->experienceService = new ExperienceServiceImpl($experienceRepository);
         $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
         $this->socialMediaService = new SocialMediaServiceImpl($socialMediaRepository);
@@ -82,6 +88,8 @@ class AcademyController {
             $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
             $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
             $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+            $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
+
             View::render("Student/dashboard", [
                 "title" => "UQI Academy | Student Dashboard",
                 "student" => $student,
@@ -90,6 +98,7 @@ class AcademyController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios,
             ]);
         }
     }

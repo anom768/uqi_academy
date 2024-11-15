@@ -26,20 +26,7 @@ class StudentRepositoryImpl implements StudentRepository {
         $statement = $this->connection->prepare("SELECT * FROM students WHERE id = ?");
         $statement->execute([$id]);
 
-        try {
-            if ($row = $statement->fetch()) {
-                $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
-                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
-                    $row["address"], $row["school"], $row["status"]
-                );
-                return $student;
-            } else {
-                return null;
-            }
-        } finally {
-            $statement->closeCursor();
-        }
+        return $this->fetchStudent($statement);
     }
 
     function getByName(string $name): ?Student
@@ -47,20 +34,7 @@ class StudentRepositoryImpl implements StudentRepository {
         $statement = $this->connection->prepare("SELECT * FROM students WHERE fullname = ?");
         $statement->execute([$name]);
 
-        try {
-            if ($row = $statement->fetch()) {
-                $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
-                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
-                    $row["address"], $row["school"], $row["status"]
-                );
-                return $student;
-            } else {
-                return null;
-            }
-        } finally {
-            $statement->closeCursor();
-        }
+        return $this->fetchStudent($statement);
     }
 
     function getByPhone(string $phone): ?Student
@@ -68,20 +42,7 @@ class StudentRepositoryImpl implements StudentRepository {
         $statement = $this->connection->prepare("SELECT * FROM students WHERE phone = ?");
         $statement->execute([$phone]);
 
-        try {
-            if ($row = $statement->fetch()) {
-                $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
-                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
-                    $row["address"], $row["school"], $row["status"]
-                );
-                return $student;
-            } else {
-                return null;
-            }
-        } finally {
-            $statement->closeCursor();
-        }
+        return $this->fetchStudent($statement);
     }
 
     function getByEmail(string $email): ?Student
@@ -89,20 +50,7 @@ class StudentRepositoryImpl implements StudentRepository {
         $statement = $this->connection->prepare("SELECT * FROM students WHERE email = ?");
         $statement->execute([$email]);
 
-        try {
-            if ($row = $statement->fetch()) {
-                $student = new Student(
-                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
-                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
-                    $row["address"], $row["school"], $row["status"]
-                );
-                return $student;
-            } else {
-                return null;
-            }
-        } finally {
-            $statement->closeCursor();
-        }
+        return $this->fetchStudent($statement);
     }
 
     function getAll(): array
@@ -114,17 +62,14 @@ class StudentRepositoryImpl implements StudentRepository {
         try {
             if ($rows = $statement->fetchAll()) {
                 foreach ($rows as $row) {
-                    $student = new Student(
+                    $students[] = new Student(
                         $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
                         $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
                         $row["address"], $row["school"], $row["status"]
                     );
-                    $students[] = $student;
                 }
-                return $students;
-            } else {
-                return $students;
             }
+            return $students;
         } finally {
             $statement->closeCursor();
         }
@@ -165,6 +110,23 @@ class StudentRepositoryImpl implements StudentRepository {
     {
         $statement = $this->connection->prepare("DELETE FROM students");
         $statement->execute();
+    }
+
+    private function fetchStudent(\PDOStatement $statement) :?Student {
+        try {
+            if ($row = $statement->fetch()) {
+                $student = new Student(
+                    $row["id"], $row["password"], $row["temp_password"], $row["photo"], $row["fullname"], 
+                    $row["specialist"], $row["email"], $row["website"], $row["bio"], $row["phone"],
+                    $row["address"], $row["school"], $row["status"]
+                );
+                return $student;
+            } else {
+                return null;
+            }
+        } finally {
+            $statement->closeCursor();
+        }
     }
 
 }

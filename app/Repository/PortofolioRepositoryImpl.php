@@ -43,10 +43,31 @@ class PortofolioRepositoryImpl implements PortofolioRepository {
         }
     }
 
-    public function deleteByID(int $id): void
+    public function getByIDStudent(string $id_student): array
     {
-        $statement = $this->connection->prepare("DELETE FROM portofolios WHERE id = ?");
-        $statement->execute([$id]);
+        $statement = $this->connection->prepare("SELECT * FROM portofolios WHERE id_student = ?");
+        $statement->execute([$id_student]);
+
+        $portofolios = [];
+        try {
+            if ($rows = $statement->fetchAll()) {
+                foreach ($rows as $row) {
+                    $portofolio = new Portofolio(
+                        $row["id"], $row["id_student"], $row["type"], $row["portofolio_name"]
+                    );
+                    $portofolios[] = $portofolio;
+                }
+            }
+            return $portofolios;
+        } finally {
+            $statement->closeCursor();
+        }
+    }
+
+    public function delete(string $id_student, string $portofolio): void
+    {
+        $statement = $this->connection->prepare("DELETE FROM portofolios WHERE id_student = ? AND portofolio = ?");
+        $statement->execute([$id_student, $portofolio]);
     }
 
     public function deleteAll(): void

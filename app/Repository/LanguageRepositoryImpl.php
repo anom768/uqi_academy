@@ -41,10 +41,10 @@ class LanguageRepositoryImpl implements LanguageRepository {
         }
     }
 
-    public function delete(string $id_student, string $language): void
+    public function delete(int $id): void
     {
-        $statement = $this->connection->prepare("DELETE FROM language WHERE id_student = ? AND language = ?");
-        $statement->execute([$id_student, $language]);
+        $statement = $this->connection->prepare("DELETE FROM languages WHERE id = ?");
+        $statement->execute([$id]);
     }
 
     public function deleteAll(): void

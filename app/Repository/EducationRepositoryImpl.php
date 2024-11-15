@@ -40,10 +40,10 @@ class EducationRepositoryImpl implements EducationRepository {
         }
     }
 
-    public function delete(string $id_student, string $school): void
+    public function delete(int $id): void
     {
-        $statement = $this->connection->prepare("DELETE FROM educations WHERE id_student = ? AND school = ?");
-        $statement->execute([$id_student, $school]);
+        $statement = $this->connection->prepare("DELETE FROM educations WHERE id = ?");
+        $statement->execute([$id]);
     }
 
     public function deleteAll(): void

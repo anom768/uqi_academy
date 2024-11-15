@@ -5,6 +5,7 @@ namespace com\bangkitanomsedhayu\uqi\academy\Helper;
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
@@ -161,6 +162,17 @@ class ServiceHelper {
         if ($request->getPassword() != $request->getConfirmPassword()) {
             throw new Exception("password and confirm password must same");
         }
+    }
+
+    public static function portofolioAddCheck(PortofolioRequest $request) {
+        if (trim($request->getPortofolio()) == "" || $request->getPortofolio() == null) {
+            throw new Exception("Portofolio link is required");
+        }
+
+        // if (!preg_match("/\b((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i", $request->getPortofolio())) {
+        //     throw new Exception("Portofolio link is not valid");
+        // }
+        
     }
 
 }

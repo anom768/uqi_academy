@@ -7,13 +7,16 @@ use com\bangkitanomsedhayu\uqi\academy\Config\Database;
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
+use com\bangkitanomsedhayu\uqi\academy\Helper\ControllerHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\ExperienceRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\LanguageRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
@@ -24,6 +27,8 @@ use com\bangkitanomsedhayu\uqi\academy\Service\ExperienceService;
 use com\bangkitanomsedhayu\uqi\academy\Service\ExperienceServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\LanguageService;
 use com\bangkitanomsedhayu\uqi\academy\Service\LanguageServiceImpl;
+use com\bangkitanomsedhayu\uqi\academy\Service\PortofolioService;
+use com\bangkitanomsedhayu\uqi\academy\Service\PortofolioServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SessionService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SessionServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SkillService;
@@ -34,7 +39,8 @@ use com\bangkitanomsedhayu\uqi\academy\Service\StudentService;
 use com\bangkitanomsedhayu\uqi\academy\Service\StudentServiceImpl;
 use Exception;
 
-class StudentController {
+class StudentController
+{
 
     private StudentService $studentService;
     private SocialMediaService $socialMediaService;
@@ -43,6 +49,7 @@ class StudentController {
     private LanguageService $languageService;
     private EducationService $educationService;
     private ExperienceService $experienceService;
+    private PortofolioService $portofolioService;
 
     public function __construct()
     {
@@ -55,7 +62,9 @@ class StudentController {
         $languageRepository = new LanguageRepositoryImpl($connection);
         $educationRepository = new EducationRepositoryImpl($connection);
         $experienceRepository = new ExperienceRepositoryImpl($connection);
-        
+        $portofolioRepository = new PortofolioRepositoryImpl($connection);
+
+        $this->portofolioService = new PortofolioServiceImpl($portofolioRepository);
         $this->experienceService = new ExperienceServiceImpl($experienceRepository);
         $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
         $this->socialMediaService = new SocialMediaServiceImpl($socialMediaRepository);
@@ -65,14 +74,16 @@ class StudentController {
         $this->educationService = new EducationServiceImpl($educationRepository);
     }
 
-    public function getProfile(string $id1, string $id2) {
-        $id = $id1."-".$id2;
+    public function getProfile(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
         $student = $this->studentService->getByID($id)->getStudent();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
         $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
         $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         if ($student != null) {
             View::render("Student/profile", [
@@ -83,25 +94,28 @@ class StudentController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios
             ]);
         }
-        
     }
 
-    public function postProfile(string $id1, string $id2) {
+    public function postProfile(string $id1, string $id2)
+    {
         $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
+        $fileName = ControllerHelper::saveImageProfile($_POST["currentimage"], "img/uqi/academy/2024/1/".$id."/", $_FILES["photo"] );
+        $student = $this->studentService->getByID($id)->getStudent();         
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
         $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
         $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         $request = new StudentUpdateProfile(
-            $id, $_POST["photo"], $_POST["fullname"], $_POST["specialist"],
+            $id, $fileName, $_POST["fullname"], $_POST["specialist"],
             $_POST["email"], $_POST["bio"], $_POST["phone"], $_POST["address"], $_POST["school"]
         );
-
+                
         try {
             $this->studentService->updateProfile($request);
             session_start();
@@ -116,19 +130,22 @@ class StudentController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios,
                 "error" => $exception->getMessage(),
             ]);
         }
     }
 
-    public function postPassword(string $id1, string $id2) {
-        $id = $id1."-".$id2;
+    public function postPassword(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
         $student = $this->studentService->getByID($id)->getStudent();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
         $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
         $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         $request = new StudentUpdatePassword($id, $_POST["password"], $_POST["confirmPassword"]);
 
@@ -146,26 +163,88 @@ class StudentController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios,
                 "error" => $exception->getMessage(),
             ]);
         }
     }
 
-    public function postEducation(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
+    public function postEducation(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $this->addFunction(
+            new EducationRequest($id, $_POST["school"], (int)$_POST["entryDate"], (int)$_POST["graduateDate"]),
+            "Add education successfull", $this->educationService
+        );
+    }
+
+    public function postExperience(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $this->addFunction(
+            new ExperienceRequest($id, $_POST["type"], $_POST["company"], $_POST["entryDate"], $_POST["endDate"], $_POST["description"]),
+            "Add experience successfull", $this->experienceService
+        );
+    }
+
+    public function postSkill(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $this->addFunction(
+            new SkillRequest($id, $_POST["skill"], (int)$_POST["score"]),
+            "Add skill successfull", $this->skillService
+        );
+    }
+
+    public function postLanguage(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $this->addFunction(
+            new LanguageRequest($id, $_POST["language"], (int)$_POST["score"]),
+            "Add language successfull", $this->languageService
+        );
+    }
+
+    public function postPortofolio(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $uniqId = uniqid();
+        $type = ControllerHelper::saveImagePortofolio("img/uqi/academy/2024/1/".$id."/portofolio/", $uniqId, $_FILES["portofolio"]);
+        $this->addFunction(
+            new PortofolioRequest($id, $type, $uniqId.basename($_FILES["portofolio"]["name"])),
+            "Add portofolio successfull", $this->portofolioService
+        );
+    }
+
+    public function deleteEducation(int $id) {
+        $this->deleteFunction($id, "Delete education successfull", $this->educationService);
+    }
+
+    public function deleteExperience(int $id) {
+        $this->deleteFunction($id, "Delete experience successfull", $this->experienceService);
+    }
+
+    public function deleteSkill(int $id) {
+        $this->deleteFunction($id, "Delete skill successfull", $this->skillService);
+    }
+
+    public function deleteLanguage(int $id) {
+        $this->deleteFunction($id, "Delete language successfull", $this->languageService);
+    }
+
+    private function addFunction($request, string $success, $service) {
+        $student = $this->sessionService->current();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
         $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
         $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
-        
-        $request = new EducationRequest($id, $_POST["school"], (int)$_POST["entryDate"], (int)$_POST["graduateDate"]);
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         try {
-            $this->educationService->add($request);
+            $service->add($request);
             session_start();
-            $_SESSION["success"] = "Add education successfull";
+            $_SESSION["success"] = $success;
             View::redirect("/profile" . "/" . $student->getId());
         } catch (Exception $exception) {
             View::render("Student/profile", [
@@ -176,26 +255,25 @@ class StudentController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios,
                 "error" => $exception->getMessage(),
             ]);
         }
     }
 
-    public function postExperience(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
+    private function deleteFunction(int $id, string $success, $service) {
+        $student = $this->sessionService->current();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
         $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
         $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
-        
-        $request = new ExperienceRequest($id, $_POST["type"], $_POST["company"], $_POST["entryDate"], $_POST["endDate"], $_POST["description"]);
-        
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
+
         try {
-            $this->experienceService->add($request);
+            $service->delete($id);
             session_start();
-            $_SESSION["success"] = "Add experience successfull";
+            $_SESSION["success"] = $success;
             View::redirect("/profile" . "/" . $student->getId());
         } catch (Exception $exception) {
             View::render("Student/profile", [
@@ -206,69 +284,9 @@ class StudentController {
                 "languages" => $languages,
                 "educations" => $educations,
                 "experiences" => $experiences,
+                "portofolios" => $portofolios,
                 "error" => $exception->getMessage(),
             ]);
         }
     }
-
-    public function postSkill(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
-        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
-        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
-        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
-        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
-        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
-        
-        $request = new SkillRequest($id, $_POST["skill"], (int)$_POST["score"]);
-        
-        try {
-            $this->skillService->add($request);
-            session_start();
-            $_SESSION["success"] = "Add skill successfull";
-            View::redirect("/profile" . "/" . $student->getId());
-        } catch (Exception $exception) {
-            View::render("Student/profile", [
-                "title" => "UQI Academy | Student Profile",
-                "student" => $student,
-                "socialMedias" => $socialMedias,
-                "skills" => $skills,
-                "languages" => $languages,
-                "educations" => $educations,
-                "experiences" => $experiences,
-                "error" => $exception->getMessage(),
-            ]);
-        }
-    }
-
-    public function postLanguage(string $id1, string $id2) {
-        $id = $id1."-".$id2;
-        $student = $this->studentService->getByID($id)->getStudent();
-        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
-        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
-        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
-        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
-        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
-        
-        $request = new LanguageRequest($id, $_POST["language"], (int)$_POST["score"]);
-        
-        try {
-            $this->languageService->add($request);
-            session_start();
-            $_SESSION["success"] = "Add language successfull";
-            View::redirect("/profile" . "/" . $student->getId());
-        } catch (Exception $exception) {
-            View::render("Student/profile", [
-                "title" => "UQI Academy | Student Profile",
-                "student" => $student,
-                "socialMedias" => $socialMedias,
-                "skills" => $skills,
-                "languages" => $languages,
-                "educations" => $educations,
-                "experiences" => $experiences,
-                "error" => $exception->getMessage(),
-            ]);
-        }
-    }
-
 }

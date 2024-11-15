@@ -10,6 +10,6 @@ interface EducationService {
 
     function add(EducationRequest $request) :EducationResponse;
     function getByIdStudent(string $id_student) :EducationArrayResponse;
-    function delete(string $id_student, string $school);
+    function delete(int $id);
 
 }

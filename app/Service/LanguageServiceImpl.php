@@ -44,9 +44,9 @@ class LanguageServiceImpl implements LanguageService {
         return new LanguageArrayResponse($this->languageRepository->getByIdStudent($id_student));
     }
 
-    public function delete(string $id_student, string $language)
+    public function delete(int $id)
     {
-        $this->languageRepository->delete($id_student, $language);
+        $this->languageRepository->delete($id);
     }
 
 }

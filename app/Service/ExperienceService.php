@@ -10,6 +10,6 @@ interface ExperienceService {
 
     function add(ExperienceRequest $request) :ExperienceResponse;
     function getByIdStudent(string $id_student) :ExperienceArrayResponse;
-    function delete(string $id_student, string $company);
+    function delete(int $id);
 
 }

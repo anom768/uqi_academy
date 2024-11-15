@@ -41,10 +41,10 @@ class ExperienceRepositoryImpl implements ExperiencesRepository {
         }
     }
 
-    public function delete(string $id_student, string $company): void
+    public function delete(int $id): void
     {
-        $statement = $this->connection->prepare("DELETE FROM experiences WHERE id_student = ? AND company = ?");
-        $statement->execute([$id_student, $company]);
+        $statement = $this->connection->prepare("DELETE FROM experiences WHERE id = ?");
+        $statement->execute([$id]);
     }
 
     public function deleteAll(): void

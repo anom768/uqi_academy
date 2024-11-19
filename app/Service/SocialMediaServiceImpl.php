@@ -7,11 +7,7 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaArrayResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaUpdate;
-use com\bangkitanomsedhayu\uqi\academy\DTO\StudentArrayResponse;
-use com\bangkitanomsedhayu\uqi\academy\DTO\StudentResponse;
-use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
 use com\bangkitanomsedhayu\uqi\academy\Entity\SocialMedia;
-use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
 use com\bangkitanomsedhayu\uqi\academy\Helper\ServiceHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepository;
 use Exception;
@@ -27,6 +23,7 @@ class SocialMediaServiceImpl implements SocialMediaService {
 
     public function add(SocialMediaRequest $request): SocialMediaResponse
     {
+        ServiceHelper::socialMediaAddCheck($request);
         try {
             Database::beginTransaction();
             $socialMedia = new SocialMedia(0, $request->getIdStudent(), $request->getPlatform(), $request->getUrl());
@@ -64,6 +61,11 @@ class SocialMediaServiceImpl implements SocialMediaService {
             Database::rollbackTransaction();
             throw $exception;
         }
+    }
+
+    public function delete(int $id): void
+    {
+        $this->socialMediaRepository->delete($id);
     }
 
 }

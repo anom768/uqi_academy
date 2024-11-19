@@ -4,13 +4,13 @@ namespace com\bangkitanomsedhayu\uqi\academy\Entity;
 
 class Portofolio {
 
-    private int $id;
+    private string $id;
     private string $id_student;
     private string $type;
     private string $portofolio_name;
 
     // Constructor
-    public function __construct(int $id, string $id_student, string $type, string $portofolio_name) {
+    public function __construct(string $id, string $id_student, string $type, string $portofolio_name) {
         $this->id = $id;
         $this->id_student = $id_student;
         $this->type = $type;
@@ -18,12 +18,12 @@ class Portofolio {
     }
 
     // Getter untuk id
-    public function getId(): int {
+    public function getId(): string {
         return $this->id;
     }
 
     // Setter untuk id
-    public function setId(int $id): void {
+    public function setId(string $id): void {
         $this->id = $id;
     }
 

@@ -38,8 +38,9 @@ class StudentServiceImpl implements StudentService {
             $password = ServiceHelper::generateRandomPassword();
             $bcryptPassword = ServiceHelper::hashPassword($password);
 
+            $website = "/public/profile/" . $id;
             $student = new Student($id, $bcryptPassword, $password, $request->getPhoto(), $request->getFullname(),
-            "", "", "", "", $request->getPhone(), $request->getAddress(), $request->getSchool(), "enabled");
+            "", "", $website, "", $request->getPhone(), $request->getAddress(), $request->getSchool(), "enabled");
             $this->studentRepository->add($student);
 
             $batch = new Batch(0, $student->getId(), "", $year, $batch);

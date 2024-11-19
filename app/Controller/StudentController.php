@@ -9,8 +9,10 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
+use com\bangkitanomsedhayu\uqi\academy\Entity\SocialMedia;
 use com\bangkitanomsedhayu\uqi\academy\Helper\ControllerHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepositoryImpl;
@@ -20,6 +22,7 @@ use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\StudentBatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\EducationService;
 use com\bangkitanomsedhayu\uqi\academy\Service\EducationServiceImpl;
@@ -35,6 +38,8 @@ use com\bangkitanomsedhayu\uqi\academy\Service\SkillService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SkillServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SocialMediaService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SocialMediaServiceImpl;
+use com\bangkitanomsedhayu\uqi\academy\Service\StudentBatchService;
+use com\bangkitanomsedhayu\uqi\academy\Service\StudentBatchServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\StudentService;
 use com\bangkitanomsedhayu\uqi\academy\Service\StudentServiceImpl;
 use Exception;
@@ -50,6 +55,7 @@ class StudentController
     private EducationService $educationService;
     private ExperienceService $experienceService;
     private PortofolioService $portofolioService;
+    private StudentBatchService $studentBatchService;
 
     public function __construct()
     {
@@ -63,12 +69,14 @@ class StudentController
         $educationRepository = new EducationRepositoryImpl($connection);
         $experienceRepository = new ExperienceRepositoryImpl($connection);
         $portofolioRepository = new PortofolioRepositoryImpl($connection);
+        $studentBatchRepository = new StudentBatchRepositoryImpl($connection);
 
+        $this->studentBatchService = new StudentBatchServiceImpl($studentBatchRepository);
         $this->portofolioService = new PortofolioServiceImpl($portofolioRepository);
         $this->experienceService = new ExperienceServiceImpl($experienceRepository);
         $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
         $this->socialMediaService = new SocialMediaServiceImpl($socialMediaRepository);
-        $this->sessionService = new SessionServiceImpl($sessionRepository, $studentRepository);
+        $this->sessionService = new SessionServiceImpl($sessionRepository, $studentBatchRepository);
         $this->skillService = new SkillServiceImpl($skillRepository);
         $this->languageService = new LanguageServiceImpl($languageRepository);
         $this->educationService = new EducationServiceImpl($educationRepository);
@@ -77,7 +85,7 @@ class StudentController
     public function getProfile(string $id1, string $id2)
     {
         $id = $id1 . "-" . $id2;
-        $student = $this->studentService->getByID($id)->getStudent();
+        $student = $this->studentBatchService->getByID($id)->getStudentBatch();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -103,7 +111,7 @@ class StudentController
     {
         $id = $id1."-".$id2;
         $fileName = ControllerHelper::saveImageProfile($_POST["currentimage"], "img/uqi/academy/2024/1/".$id."/", $_FILES["photo"] );
-        $student = $this->studentService->getByID($id)->getStudent();         
+        $student = $this->studentBatchService->getByID($id)->getStudentBatch();    
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -139,7 +147,7 @@ class StudentController
     public function postPassword(string $id1, string $id2)
     {
         $id = $id1 . "-" . $id2;
-        $student = $this->studentService->getByID($id)->getStudent();
+        $student = $this->studentBatchService->getByID($id)->getStudentBatch();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -173,7 +181,7 @@ class StudentController
     {
         $id = $id1 . "-" . $id2;
         $this->addFunction(
-            new EducationRequest($id, $_POST["school"], (int)$_POST["entryDate"], (int)$_POST["graduateDate"]),
+            new EducationRequest($id, $_POST["type"], $_POST["school"], (int)$_POST["entryYear"], (int)$_POST["graduateYear"], $_POST["address"], $_POST["description"]),
             "Add education successfull", $this->educationService
         );
     }
@@ -182,7 +190,7 @@ class StudentController
     {
         $id = $id1 . "-" . $id2;
         $this->addFunction(
-            new ExperienceRequest($id, $_POST["type"], $_POST["company"], $_POST["entryDate"], $_POST["endDate"], $_POST["description"]),
+            new ExperienceRequest($id, $_POST["type"], $_POST["company"], $_POST["entryDate"], $_POST["endDate"], $_POST["address"], $_POST["website"], $_POST["description"]),
             "Add experience successfull", $this->experienceService
         );
     }
@@ -205,13 +213,22 @@ class StudentController
         );
     }
 
+    public function postSocialMedia(string $id1, string $id2)
+    {
+        $id = $id1 . "-" . $id2;
+        $this->addFunction(
+            new SocialMediaRequest($id, $_POST["platform"], $_POST["url"]),
+            "Add social media successfull", $this->socialMediaService
+        );
+    }
+
     public function postPortofolio(string $id1, string $id2)
     {
         $id = $id1 . "-" . $id2;
-        $uniqId = uniqid();
+        $uniqId = uniqid() . "_";
         $type = ControllerHelper::saveImagePortofolio("img/uqi/academy/2024/1/".$id."/portofolio/", $uniqId, $_FILES["portofolio"]);
         $this->addFunction(
-            new PortofolioRequest($id, $type, $uniqId.basename($_FILES["portofolio"]["name"])),
+            new PortofolioRequest($uniqId, $id, $type, basename($_FILES["portofolio"]["name"])),
             "Add portofolio successfull", $this->portofolioService
         );
     }
@@ -230,6 +247,23 @@ class StudentController
 
     public function deleteLanguage(int $id) {
         $this->deleteFunction($id, "Delete language successfull", $this->languageService);
+    }
+
+    public function deleteSocialMedia(int $id) {
+        $this->deleteFunction($id, "Delete social media successfull", $this->socialMediaService);
+    }
+
+    public function deletePortofolio(string $id) {
+        $this->deleteFunction($id, "Delete portofolio successfull", $this->portofolioService);
+    }
+
+    public function updateEducation() {
+        $data = $_POST;
+        foreach ($data["type"] as $id => $type) {
+            echo "ID : " . $id;
+            echo "Type : " . $type;
+            echo "School : " . $data["school"][$id];
+        }
     }
 
     private function addFunction($request, string $success, $service) {
@@ -261,8 +295,9 @@ class StudentController
         }
     }
 
-    private function deleteFunction(int $id, string $success, $service) {
+    private function deleteFunction($id, string $success, $service) {
         $student = $this->sessionService->current();
+        $studentBatch = $this->studentBatchService->getByID($student->getId())->getStudentBatch();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
         $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -271,6 +306,10 @@ class StudentController
         $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         try {
+            if ($service instanceof PortofolioServiceImpl) {
+                $targetDir = "img/uqi/academy/" . $studentBatch->getYear() . "/" . $studentBatch->getBatch() . "/" . $studentBatch->getId() . "/portofolio/";
+                ControllerHelper::deletePortofolio($targetDir, $id);
+            }
             $service->delete($id);
             session_start();
             $_SESSION["success"] = $success;

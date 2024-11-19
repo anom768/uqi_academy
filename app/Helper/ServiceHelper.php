@@ -7,6 +7,7 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
@@ -98,7 +99,8 @@ class ServiceHelper {
     public static function educationAddCheck(EducationRequest $request) {
         if (trim($request->getSchool()) == "" || $request->getSchool() == null ||
             trim($request->getEntryYear()) == "" || $request->getEntryYear() == null ||
-            trim($request->getGraduateYear()) == "" || $request->getGraduateYear() == null) {
+            trim($request->getGraduateYear()) == "" || $request->getGraduateYear() == null ||
+            trim($request->getType()) == "" || trim($request->getAddress()) == "" || $request->getAddress() == null) {
             throw new Exception("All data is required");
         }
 
@@ -114,7 +116,8 @@ class ServiceHelper {
         if (trim($request->getCompany()) == "" || $request->getCompany() == null ||
             trim($request->getType()) == "" || $request->getType() == null ||
             trim($request->getEntryDate()) == "" || $request->getEntryDate() == null ||
-            trim($request->getEndDate()) == "" || $request->getEndDate() == null) {
+            trim($request->getEndDate()) == "" || $request->getEndDate() == null ||
+            trim($request->getAddress()) == "" || $request->getAddress() == null) {
             throw new Exception("All data is required");
         }
 
@@ -168,11 +171,14 @@ class ServiceHelper {
         if (trim($request->getPortofolio()) == "" || $request->getPortofolio() == null) {
             throw new Exception("Portofolio link is required");
         }
-
-        // if (!preg_match("/\b((http|https):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i", $request->getPortofolio())) {
-        //     throw new Exception("Portofolio link is not valid");
-        // }
         
+    }
+
+    public static function socialMediaAddCheck(SocialMediaRequest $request) {
+        if (trim($request->getPlatform()) == "" || $request->getPlatform() == null ||
+            trim($request->getUrl()) == "" || $request->getUrl() == null) {
+                throw new Exception("All data is required");
+        }
     }
 
 }

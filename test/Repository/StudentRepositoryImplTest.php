@@ -3,24 +3,28 @@
 namespace com\bangkitanomsedhayu\uqi\academy\Repository;
 
 use com\bangkitanomsedhayu\uqi\academy\Config\Database;
+use com\bangkitanomsedhayu\uqi\academy\Entity\Batch;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
 use PHPUnit\Framework\TestCase;
 
 class StudentRepositoryimplTest extends TestCase {
 
     private StudentRepository $studentRepository;
+    private BatchRepository $batchRepository;
+    private StudentBatchRepository $studentBatchRepository;
 
     protected function setUp(): void
     {
         $connection = Database::getConnection();
         $this->studentRepository = new StudentRepositoryImpl($connection);
-        $batchRepository = new BatchRepositoryImpl($connection);
+        $this->batchRepository = new BatchRepositoryImpl($connection);
         $sessionRepository = new SessionRepositoryImpl($connection);
         $socialMediaRepository = new SocialMediaRepositoryImpl($connection);
+        $this->studentBatchRepository = new StudentBatchRepositoryImpl($connection);
 
         $socialMediaRepository->deleteAll();
         $sessionRepository->deleteAll();
-        $batchRepository->deleteAll();
+        $this->batchRepository->deleteAll();
         $this->studentRepository->deleteAll();
     }
 
@@ -29,6 +33,18 @@ class StudentRepositoryimplTest extends TestCase {
             new Student("student-01", "rahasia", "rahasia", "bangkit.jpg", "BAS", "3d", "email", "web","BAS", "089", "jalan", "smk", "enabled")
         );
         return $student;
+    }
+
+    private function addBatch(Student $student) : Batch {
+        return $this->batchRepository->add(new Batch(0, $student->getId(), "", 2024, 1));
+    }
+
+    public function testStudentBatch() {
+        $student = $this->addStudent();
+        $this->addBatch($student);
+
+        $studentbatchs = $this->studentBatchRepository->getByID($student->getId());
+        self::assertEquals(1, sizeof($studentbatchs));
     }
 
     public function testAddSuccess() {

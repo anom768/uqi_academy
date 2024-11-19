@@ -12,6 +12,7 @@ interface SocialMediaService {
     function add(SocialMediaRequest $request) :SocialMediaResponse;
     function getbyIdStudent(string $id_student) :SocialMediaArrayResponse;
     function getAll() :SocialMediaArrayResponse;
+    function delete(int $id): void;
     function update(SocialMediaUpdate $request) :SocialMediaResponse;
 
 }

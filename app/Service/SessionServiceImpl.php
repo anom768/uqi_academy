@@ -4,7 +4,9 @@ namespace com\bangkitanomsedhayu\uqi\academy\Service;
 
 use com\bangkitanomsedhayu\uqi\academy\Entity\Session;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
+use com\bangkitanomsedhayu\uqi\academy\Entity\StudentBatch;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
+use com\bangkitanomsedhayu\uqi\academy\Repository\StudentBatchRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
 
 class SessionServiceImpl implements SessionService {
@@ -12,12 +14,12 @@ class SessionServiceImpl implements SessionService {
     public static string $COOKIE_NAME = "SANTUN-JASA-DALAM-SERUNI";
 
     private SessionRepository $sessionRepository;
-    private StudentRepository $studentRepository;
+    private StudentBatchRepository $studentBatchRepository;
 
-    public function __construct(SessionRepository $sessionRepository, StudentRepository $studentRepository)
+    public function __construct(SessionRepository $sessionRepository, StudentBatchRepository $studentBatchRepository)
     {
         $this->sessionRepository = $sessionRepository;
-        $this->studentRepository = $studentRepository;
+        $this->studentBatchRepository = $studentBatchRepository;
     }
 
     public function create(string $id_student): Session
@@ -38,7 +40,7 @@ class SessionServiceImpl implements SessionService {
         setcookie(self::$COOKIE_NAME, '', 1, "/");
     }
 
-    public function current(): ?Student
+    public function current(): ?StudentBatch
     {
         $sessionId = $_COOKIE[self::$COOKIE_NAME] ?? '';
 
@@ -47,7 +49,7 @@ class SessionServiceImpl implements SessionService {
             return null;
         }
 
-        return $this->studentRepository->getByID($session->getIdStudent());
+        return $this->studentBatchRepository->getByID($session->getIdStudent());
     }
 
 }

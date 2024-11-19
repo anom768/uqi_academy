@@ -26,7 +26,7 @@ class ExperienceServiceImpl implements ExperienceService {
 
         try {
             Database::beginTransaction();
-            $experience = new Experience(0, $request->getIdStudent(), $request->getType(), $request->getCompany(), $request->getEntryDate(), $request->getEndDate(), $request->getDescription());
+            $experience = new Experience(0, $request->getIdStudent(), $request->getType(), $request->getCompany(), $request->getEntryDate(), $request->getEndDate(), $request->getAddress(), $request->getWebsite(), $request->getDescription());
 
             $this->experienceRepository->add($experience);
             

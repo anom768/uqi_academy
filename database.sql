@@ -19,7 +19,7 @@ CREATE TABLE students (
 ) ENGINE = INNODB;
 
 CREATE TABLE portofolios (
-    id INT NOT NULL AUTO_INCREMENT,
+    id VARCHAR(255) NOT NULL,
     id_student VARCHAR(10) NOT NULL,
     type VARCHAR(10) NOT NULL,
     portofolio_name VARCHAR(255) NOT NULL,
@@ -74,9 +74,12 @@ CREATE TABLE sessions (
  CREATE TABLE educations (
     id INT NOT NULL AUTO_INCREMENT,
     id_student VARCHAR(10) NOT NULL,
-    school VARCHAR(255),
-    entry_year INT,
-    graduate_year INT, 
+    type VARCHAR(20) NOT NULL,
+    school VARCHAR(255) NOT NULL,
+    entry_year INT NOT NULL,
+    graduate_year INT NOT NULL,
+    address TEXT,
+    description TEXT, 
     PRIMARY KEY (id),
     CONSTRAINT fk_student_educations FOREIGN KEY (id_student) REFERENCES students(id)
  ) ENGINE = INNODB;
@@ -88,6 +91,8 @@ CREATE TABLE sessions (
     company VARCHAR(255) NOT NULL,
     entry_date DATE NOT NULL,
     end_date DATE NOT NULL,
+    address TEXT NOT NULL,
+    website VARCHAR(255),
     description TEXT,
     PRIMARY KEY (id),
     CONSTRAINT fk_student_experiences FOREIGN KEY (id_student) REFERENCES students(id)

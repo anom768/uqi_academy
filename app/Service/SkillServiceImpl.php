@@ -6,15 +6,9 @@ use com\bangkitanomsedhayu\uqi\academy\Config\Database;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillArrayResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillResponse;
-use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaArrayResponse;
-use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaResponse;
-use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaUpdate;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Skill;
-use com\bangkitanomsedhayu\uqi\academy\Entity\SocialMedia;
 use com\bangkitanomsedhayu\uqi\academy\Helper\ServiceHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepository;
-use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepository;
 use Exception;
 
 class SkillServiceImpl implements SkillService {

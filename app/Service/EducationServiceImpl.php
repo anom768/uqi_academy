@@ -26,7 +26,7 @@ class EducationServiceImpl implements EducationService {
 
         try {
             Database::beginTransaction();
-            $education = new Education(0, $request->getIdStudent(), $request->getSchool(), $request->getEntryYear(), $request->getGraduateYear());
+            $education = new Education(0, $request->getIdStudent(), $request->getType(), $request->getSchool(), $request->getEntryYear(), $request->getGraduateYear(), $request->getAddress(), $request->getDescriptiom());
             $this->educationRepository->add($education);
 
             $educationResponse = new EducationResponse($education);

@@ -10,6 +10,6 @@ interface PortofolioService {
 
     function add(PortofolioRequest $request) :PortofolioResponse;
     function getByIdStudent(string $id_student) :PortofolioArrayResponse;
-    function delete(string $id_student, string $language);
+    function delete(string $id);
 
 }

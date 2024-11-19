@@ -9,7 +9,7 @@ class ControllerHelper {
     public static function saveImageProfile(string $currentImage, string $targetDir, array $image ):string {
         $file_name = basename($image["name"]);
 
-        if ($image != "") {
+        if ($image["name"] != "") {
             if ($currentImage && file_exists($targetDir . $currentImage)) {
                 unlink($targetDir . $currentImage); // Hapus file lama
             }
@@ -64,6 +64,23 @@ class ControllerHelper {
         }
     
         return $fileType;
-    }    
+    }
+
+    public static function deletePortofolio(string $targetDir, string $filename) {
+        $files = scandir($targetDir);
+
+        // Cari file yang mengandung nama $filename
+        foreach ($files as $file) {
+            if (strpos($file, $filename) !== false) {
+                $filePath = $targetDir . $file;
+    
+                // Periksa apakah file benar-benar ada dan bisa dihapus
+                if (is_file($filePath) && file_exists($filePath)) {
+                    unlink($filePath);
+                    return true; // Berhasil menghapus file
+                }
+            }
+        }
+    }
 
 }

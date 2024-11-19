@@ -15,10 +15,9 @@ class PortofolioRepositoryImpl implements PortofolioRepository {
 
     public function add(Portofolio $portofolio): Portofolio
     {
-        $statement = $this->connection->prepare("INSERT INTO portofolios (id_student, type, portofolio_name) VALUES(?,?,?)");
-        $statement->execute([$portofolio->getIdStudent(), $portofolio->getType(), $portofolio->getPortofolioName()]);
+        $statement = $this->connection->prepare("INSERT INTO portofolios (id, id_student, type, portofolio_name) VALUES(?,?,?,?)");
+        $statement->execute([$portofolio->getId(), $portofolio->getIdStudent(), $portofolio->getType(), $portofolio->getPortofolioName()]);
 
-        $portofolio->setId($this->connection->lastInsertId());
         return $portofolio;
     }
 
@@ -64,10 +63,10 @@ class PortofolioRepositoryImpl implements PortofolioRepository {
         }
     }
 
-    public function delete(string $id_student, string $portofolio): void
+    public function delete(string $id): void
     {
-        $statement = $this->connection->prepare("DELETE FROM portofolios WHERE id_student = ? AND portofolio = ?");
-        $statement->execute([$id_student, $portofolio]);
+        $statement = $this->connection->prepare("DELETE FROM portofolios WHERE id = ?");
+        $statement->execute([$id]);
     }
 
     public function deleteAll(): void

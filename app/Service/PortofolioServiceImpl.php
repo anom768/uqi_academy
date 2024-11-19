@@ -31,7 +31,7 @@ class PortofolioServiceImpl implements PortofolioService {
 
         try {
             Database::beginTransaction();
-            $portofolio = new Portofolio(0, $request->getIdStudent(), $request->getType(), $request->getPortofolio());
+            $portofolio = new Portofolio($request->getId(), $request->getIdStudent(), $request->getType(), $request->getPortofolio());
             $this->portofolioRepository->add($portofolio);
 
             $portofolioResponse = new PortofolioResponse($portofolio);
@@ -49,9 +49,9 @@ class PortofolioServiceImpl implements PortofolioService {
         return new PortofolioArrayResponse($this->portofolioRepository->getByIdStudent($id_student));
     }
 
-    public function delete(string $id_student, string $language)
+    public function delete(string $id)
     {
-        $this->portofolioRepository->delete($id_student, $language);
+        $this->portofolioRepository->delete($id);
     }
 
 }

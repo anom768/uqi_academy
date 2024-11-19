@@ -56,8 +56,6 @@
         <?php } else { ?>
             <div class="row align-items-right g-lg-5 py-5">
                 <div class="mx-auto">
-                    <form id="deleteForm" method="post" style="display: none">
-                    </form>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -75,11 +73,15 @@
                             foreach ($model["students"] as $student) { ?>
                                 <tr>
                                     <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                    <td>
-                                        <img src="/img/uqi/academy/2024/1/<?= $student->getPhoto() ?>" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                                    <td class="text-center align-middle">
+                                        <?php if ($student->getPhoto() == "blank.jpg") {?>
+                                            <img src="/img/blank.jpg" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                                        <?php } else { ?>
+                                            <img src="/img/uqi/academy/<?= $student->getYear().'/'.$student->getBatch().'/'.$student->getId().'/'.$student->getPhoto() ?>" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                                        <?php } ?>
                                     </td>
                                     <td class="text-center align-middle">
-                                        <a href="/profile/<?= $student->getId() ?>" class="text-decoration-underline"><?= $student->getId() ?></a>
+                                        <a target="_blank" href="/public/profile/<?= $student->getId() ?>" class="text-decoration-underline"><?= $student->getId() ?></a>
                                     </td>
                                     <td class="text-center align-middle"><?= $student->getTempPassword() ?></td>
                                     <td class="text-center align-middle"><?= $student->getFullname() ?></td>
@@ -87,7 +89,7 @@
                                     <td class="text-center align-middle"><?= $student->getSchool() ?></td>
                                     <td class="text-center align-middle">
                                         <form method="get">
-                                            <button class="btn btn-primary" formaction="/edit/<?= $student->getId() ?>"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-primary" formaction="/modify/profile/<?= $student->getId() ?>"><i class="bi bi-pencil"></i></button>
                                         </form>
                                     </td>
                                 </tr>

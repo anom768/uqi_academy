@@ -15,9 +15,8 @@ class ExperienceRepositoryImpl implements ExperiencesRepository {
 
     public function add(Experience $experience): Experience
     {
-        var_dump($experience);
-        $statement = $this->connection->prepare("INSERT INTO experiences (id_student, type, company, entry_date, end_date, description) VALUES (?,?,?,?,?,?)");
-        $statement->execute([$experience->getIdStudent(), $experience->getType(), $experience->getCompany(), $experience->getEntryDate(), $experience->getEndDate(), $experience->getDescription()]);
+        $statement = $this->connection->prepare("INSERT INTO experiences (id_student, type, company, entry_date, end_date, address, website, description) VALUES (?,?,?,?,?,?,?,?)");
+        $statement->execute([$experience->getIdStudent(), $experience->getType(), $experience->getCompany(), $experience->getEntryDate(), $experience->getEndDate(), $experience->getAddress(), $experience->getWebsite(), $experience->getDescription()]);
 
         $experience->setId($this->connection->lastInsertId());
         return $experience;
@@ -32,7 +31,7 @@ class ExperienceRepositoryImpl implements ExperiencesRepository {
         try {
             if ($rows = $statement->fetchAll()) {
                 foreach ($rows as $row) {
-                    $experiences[] = new Experience($row["id"], $row["id_student"], $row["type"], $row["company"], $row["entry_date"], $row["end_date"], $row["description"]);
+                    $experiences[] = new Experience($row["id"], $row["id_student"], $row["type"], $row["company"], $row["entry_date"], $row["end_date"], $row["address"], $row["website"], $row["description"]);
                 }
             }
             return $experiences;

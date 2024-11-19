@@ -64,6 +64,35 @@
             border-radius: 0.25rem;
             /* Tambahkan border-radius untuk gaya */
         }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            /* Default background */
+            aspect-ratio: 16 / 9;
+            /* Ensure landscape ratio */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+            /* Smooth hover effect */
+        }
+
+        .gallery-item:hover img,
+        .gallery-item:hover video {
+            transform: scale(1.1);
+            /* Slight zoom on hover */
+        }
     </style>
 </head>
 
@@ -104,7 +133,11 @@
                     <!-- Sidebar -->
                     <div class="col-md-4 bg-dark-blue text-white text-center p-4 rounded-start">
                         </br>
-                        <img src="/img/uqi/academy/2024/1/<?= $model["student"]->getId() . "/" . $model["student"]->getPhoto() ?>" alt="Profile Picture" class="profile-img">
+                        <?php if ($model["student"]->getPhoto() == "blank.jpg") { ?>
+                            <img src="/img/blank.jpg" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                        <?php } else { ?>
+                            <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/' . $model["student"]->getPhoto() ?>" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                        <?php } ?>
                         <h2 class="mb-3"><?= $model["student"]->getFullname() ?></h2>
                         <p><?= $model["student"]->getSpecialist() ?? "(edit your specialist)" ?></p>
 
@@ -115,7 +148,7 @@
                             <p><i class="bi bi-telephone-fill"></i> <?= $model["student"]->getPhone() ?></p>
                             <p><i class="bi bi-envelope-fill"></i> <?= $model["student"]->getEmail() ?? "(edit your email)" ?></p>
                             <p><i class="bi bi-geo-alt-fill"></i> <?= $model["student"]->getAddress() ?></p>
-                            <p><i class="bi bi-globe"></i> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></p>
+                            <p><i class="bi bi-globe"></i><a target="_blank" href="<?= $model["student"]->getWebsite() ?>"> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></a> </p>
                         </div>
 
                         <!-- Skills -->
@@ -144,6 +177,41 @@
                                 <?php } ?>
                             </ul>
                         </div>
+                        <div class="mt-4 text-start">
+                            <h5 class="fw-bold">Social Media</h5>
+                            <hr class="divider">
+                            <ul class="list-unstyled">
+                                <?php for ($i = 0; $i < sizeof($model["socialMedias"]); $i++) {
+                                    $platform = strtolower($model["socialMedias"][$i]->getPlatform());
+                                    $url = $model["socialMedias"][$i]->getUrl();
+                                ?>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <span class="d-flex align-items-center">
+                                            <?php if ($platform == "facebook") { ?>
+                                                <i class="bi bi-facebook me-2"></i>
+                                            <?php } else if ($platform == "instagram") { ?>
+                                                <i class="bi bi-instagram me-2"></i>
+                                            <?php } else if ($platform == "twitter") { ?>
+                                                <i class="bi bi-twitter me-2"></i>
+                                            <?php } else if ($platform == "linkedin") { ?>
+                                                <i class="bi bi-linkedin me-2"></i>
+                                            <?php } else if ($platform == "youtube") { ?>
+                                                <i class="bi bi-youtube me-2"></i>
+                                            <?php } else if ($platform == "tiktok") { ?>
+                                                <i class="bi bi-tiktok me-2"></i>
+                                            <?php } else if ($platform == "whatsapp") { ?>
+                                                <i class="bi bi-whatsapp me-2"></i>
+                                            <?php } else { ?>
+                                                <i class="bi bi-globe me-2"></i>
+                                            <?php } ?>
+                                            
+                                        </span>
+                                        <a href="<?= $url ?>" target="_blank"><?= $url ?></a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>
+
                     </div>
 
                     <!-- Main Content -->
@@ -160,9 +228,9 @@
                             <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h6 class="fw-bold mb-1"><?= $model["educations"][$i]->getSchool() ?></h6>
-                                        <!-- <p class="mb-0">Harvard University, Cambridge, MA</p>
-                                    <small>Clubs: Robotics Society, Business Club</small> -->
+                                        <h6 class="fw-bold mb-1"><?= $model["educations"][$i]->getType(). ' - ' . $model["educations"][$i]->getSchool() ?></h6>
+                                        <p class="mb-0"><?= $model["educations"][$i]->getAddress() ?></p>
+                                    <small><?= $model["educations"][$i]->getDescription() ?></small>
                                     </div>
                                     <small><?= $model["educations"][$i]->getEntryYear() ?> - <?= $model["educations"][$i]->getGraduateYear() ?></small>
                                 </div>
@@ -176,8 +244,9 @@
                             <?php for ($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h6 class="fw-bold mb-1"><?= $model["experiences"][$i]->getType() ?></h6>
-                                        <p class="mb-0"><?= $model["experiences"][$i]->getCompany() ?></p>
+                                        <h6 class="fw-bold mb-1"><?= $model["experiences"][$i]->getType() . ' - ' . $model["experiences"][$i]->getCompany() ?></h6>
+                                        <p class="mb-0"><?= $model["experiences"][$i]->getAddress() ?></p>
+                                        <p class="mb-0"><?= $model["experiences"][$i]->getWebsite() ?></p>
                                         <small><?= $model["experiences"][$i]->getDescription() ?></small>
                                     </div>
                                     <small><?= $model["experiences"][$i]->getEntryDate() ?> - <?= $model["experiences"][$i]->getEndDate() ?></small>
@@ -191,21 +260,20 @@
 
         <div class="container my-5">
             <h5 class="section-title text-center">Portofolio</h5>
-            <div class="row">
+            <div class="row g-3">
                 <?php
                 for ($i = 0; $i < sizeof($model["portofolios"]); $i++) {
                     if ($model["portofolios"][$i]->getType() == "image") { ?>
-                        <div class="col-md-3 mb-4">
-                            <div class="card">
-                                <img src="img/uqi/academy/2024/1/<?= $model["student"]->getId() ?>/portofolio/<?= $model["portofolios"][$i]->getPortofolioName() ?>" class="card-img-top" alt="Image <?= $i ?>">
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="image" data-src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
+                                <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
                             </div>
                         </div>
                     <?php } else if ($model["portofolios"][$i]->getType() == "video") { ?>
-                        <div class="col-md-3 mb-4">
-                            <div class="card">
-                                <video class="card-img-top" controls>
-                                    <source src="img/uqi/academy/2024/1/<?= $model["student"]->getId() ?>/portofolio/<?= $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
-                                    Your browser does not support the video tag.
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="video" data-src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
+                                <video muted>
+                                    <source src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
                                 </video>
                             </div>
                         </div>
@@ -215,28 +283,51 @@
             </div>
         </div>
 
-        <script>
-            function generatePDF() {
-                const element = document.getElementById('cv-content');
-                const options = {
-                    margin: 0.5,
-                    filename: 'Jane_Smith_CV.pdf',
-                    image: {
-                        type: 'jpeg',
-                        quality: 0.98
-                    },
-                    html2canvas: {
-                        scale: 3
-                    },
-                    jsPDF: {
-                        unit: 'in',
-                        format: 'a4',
-                        orientation: 'portrait'
-                    }
-                };
+        <!-- Modal for Media Popup -->
+        <div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <h5 class="modal-title" id="mediaModalLabel">Full Media View</h5> -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <!-- Placeholder for dynamic content -->
+                        <div id="modalContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                html2pdf().set(options).from(element).save();
-            }
+        <script>
+            // Attach click event listener to gallery items
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type'); // Get the type (image/video)
+                    const src = this.getAttribute('data-src'); // Get the source URL
+                    const modalContent = document.getElementById('modalContent');
+
+                    // Clear previous content
+                    modalContent.innerHTML = '';
+
+                    if (type === 'image') {
+                        // Create an image element
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.alt = 'Full Size Image';
+                        img.className = 'img-fluid';
+                        modalContent.appendChild(img);
+                    } else if (type === 'video') {
+                        // Create a video element
+                        const video = document.createElement('video');
+                        video.src = src;
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.className = 'w-100'; // Make it responsive
+                        modalContent.appendChild(video);
+                    }
+                });
+            });
         </script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

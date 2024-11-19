@@ -11,6 +11,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+    <style>
+        .portfolio-media {
+            max-width: 100px;
+            /* Atur ukuran maksimum agar sama dengan gambar */
+            max-height: auto;
+            /* Pertahankan aspek rasio */
+            display: block;
+            /* Pastikan elemen tidak tumpang tindih */
+            margin: 0 auto;
+            /* Opsional, jika ingin mengatur rata tengah */
+        }
+    </style>
 </head>
 
 <body>
@@ -39,7 +51,7 @@
             </div>
         </div>
     </nav></br>
-    <div class="container col-xl-10 col-xl-8 px-0 py-5">
+    <div class="container-fluid px-5 py-5">
         <?php session_start();
         if (isset($_SESSION['success'])) { ?>
             <div class="row">
@@ -65,7 +77,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input name="photo" type="file" class="form-control" id="photo" accept="image/*" placeholder="Upload image">
-                        <label for="photo">Cuurent Image: <?= $model["student"]->getPhoto() ?? "" ?></label>
+                        <label for="photo">Curent Image: <?= $model["student"]->getPhoto() ?? "" ?></label>
                     </div>
                     <div class="form-floating mb-3">
                         <input value="<?= $model["student"]->getId() ?? "" ?>" name="id" type="text" class="form-control" id="id" placeholder="id" disabled>
@@ -84,7 +96,7 @@
                         <label for="email">Email*</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input value="<?= $model["student"]->getWebsite() ?? "" ?>" name="website" type="text" class="form-control" id="website" placeholder="website">
+                        <input value="<?= $model["student"]->getWebsite() ?? "" ?>" name="website" type="text" class="form-control" id="website" placeholder="website" disabled>
                         <label for="website">Website*</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -103,14 +115,14 @@
                         <input value="<?= $model["student"]->getSchool() ?? "" ?>" name="school" type="text" class="form-control" id="school" placeholder="school">
                         <label for="school">School*</label>
                     </div>
-                    <!-- <div class="form-floating mb-3">
-                        <input name="year" type="hidden" class="form-control" id="year" placeholder="year" value="2024">
+                    <div class="form-floating mb-3">
+                        <input value="<?= $model["student"]->getYear() ?? 0 ?>" name="year" type="number" class="form-control" id="year" placeholder="year" disabled>
                         <label for="year">Year*</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input name="batch" type="hidden" class="form-control" id="batch" placeholder="batch" value="1">
+                        <input value="<?= $model["student"]->getBatch() ?? 0 ?>" name="batch" type="number" class="form-control" id="batch" placeholder="batch" disabled>
                         <label for="batch">Batch*</label>
-                    </div> -->
+                    </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Update Profile</button>
                 </form>
             </div>
@@ -134,53 +146,93 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Education</h1>
+
+                <?php if (sizeof($model["educations"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data education found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Type</th>
+                                        <th class="text-center" scope="col">School Name</th>
+                                        <th class="text-center" scope="col">Entry Year</th>
+                                        <th class="text-center" scope="col">Graduate Year</th>
+                                        <th class="text-center" scope="col">Address</th>
+                                        <th class="text-center" scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["educations"] as $education) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle"><?= $education->getType() ?></td>
+                                            <td class="text-center align-middle"><?= $education->getSchool() ?></td>
+                                            <td class="text-center align-middle"><?= $education->getEntryYear() ?></td>
+                                            <td class="text-center align-middle"><?= $education->getGraduateYear() ?></td>
+                                            <td class="text-center align-middle"><?= $education->getAddress() ?></td>
+                                            <td class="text-center align-middle"><?= $education->getDescription() ?></td>
+                                            <!-- <td class="text-center align-middle">
+                                                <form method="post">
+                                                    <button class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this education data?');" formaction="/education/delete/<?= $education->getId() ?>"><i class="bi bi-trash-fill"></i></button>
+                                                </form>
+                                            </td> -->
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
                 <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/education/<?= $model["student"]->getId() ?>">
-                    <?php for ($i = 0; $i < sizeof($model["educations"]); $i++) { ?>
-                        <div class="row mb-3 d-flex align-items-center">
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input value="<?= $model["educations"][$i]->getSchool() ?>" name="school<?= $i ?>" type="text" class="form-control" id="school<?= $i ?>" placeholder="school">
-                                    <label for="school<?= $i ?>">School*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["educations"][$i]->getEntryYear() ?>" name="entryDate<?= $i ?>" type="number" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
-                                    <label for="entryDate<?= $i ?>">Entry Date*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["educations"][$i]->getGraduateYear() ?>" name="graduateDate<?= $i ?>" type="number" class="form-control" id="graduateDate<?= $i ?>" placeholder="graduateDate">
-                                    <label for="graduateDate<?= $i ?>">Graduate Date*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 text-end">
-                                <a href="/education/delete/<?= $model["educations"][$i]->getId() ?>" class="btn btn-link text-danger p-0" onclick="return confirm('Are you sure you want to delete this entry?');">
-                                    <i class="bi bi-trash-fill"></i> <!-- Ikon tong sampah merah -->
-                                </a>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="type" class="form-control" id="type">
+                                    <option value="" selected>Choose</option>
+                                    <option value="SD">SD</option>
+                                    <option value="SMP">SMP</option>
+                                    <option value="SMA">SMA</option>
+                                    <option value="SMK">SMK</option>
+                                    <option value="D1">D1</option>
+                                    <option value="D2">D2</option>
+                                    <option value="D3">D3</option>
+                                    <option value="S1">S1</option>
+                                    <option value="S2">S2</option>
+                                    <option value="S3">S3</option>
+                                </select>
+                                <label for="type">Type*</label>
                             </div>
                         </div>
-                    <?php } ?>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-floating">
                                 <input name="school" type="text" class="form-control" id="school" placeholder="school">
-                                <label for="school">School*</label>
+                                <label for="school">School Name*</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="entryDate" type="number" class="form-control" id="entryDate" placeholder="entryDate">
-                                <label for="entryDate">Entry Date*</label>
+                                <input name="entryYear" type="number" class="form-control" id="entryYear" placeholder="entryYear">
+                                <label for="entryYear">Entry Year*</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-floating">
-                                <input name="graduateDate" type="number" class="form-control" id="graduateDate" placeholder="graduateDate">
-                                <label for="graduateDate">Graduate Date*</label>
+                                <input name="graduateYear" type="number" class="form-control" id="graduateYear" placeholder="graduateYear">
+                                <label for="graduateYear">Graduate Year*</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input name="address" type="text" class="form-control" id="address" placeholder="address">
+                        <label for="address">Address*</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input name="description" type="text" class="form-control" id="description" placeholder="description">
+                        <label for="description">Description*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Education</button>
                 </form>
@@ -189,61 +241,60 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Experience</h1>
+                <?php if (sizeof($model["experiences"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data experience found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Type</th>
+                                        <th class="text-center" scope="col">Company</th>
+                                        <th class="text-center" scope="col">Entry Date</th>
+                                        <th class="text-center" scope="col">End Date</th>
+                                        <th class="text-center" scope="col">Address</th>
+                                        <th class="text-center" scope="col">Website</th>
+                                        <th class="text-center" scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["experiences"] as $experience) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle"><?= $experience->getType() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getCompany() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getEntryDate() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getEndDate() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getAddress() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getWebsite() ?></td>
+                                            <td class="text-center align-middle"><?= $experience->getDescription() ?></td>
+                                
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
                 <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/experience/<?= $model["student"]->getId() ?>">
-                    <?php for ($i = 0; $i < sizeof($model["experiences"]); $i++) { ?>
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["experiences"][$i]->getCompany() ?>" name="company<?= $i ?>" type="text" class="form-control" id="company<?= $i ?>" placeholder="company">
-                                    <label for="company<?= $i ?>">Company*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["experiences"][$i]->getType() ?>" name="type<?= $i ?>" type="text" class="form-control" id="type<?= $i ?>" placeholder="type">
-                                    <label for="type<?= $i ?>">Type*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["experiences"][$i]->getEntryDate() ?>" name="entryDate<?= $i ?>" type="date" class="form-control" id="entryDate<?= $i ?>" placeholder="entryDate">
-                                    <label for="entryDate<?= $i ?>">Entry Date*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input value="<?= $model["experiences"][$i]->getEndDate() ?>" name="endDate<?= $i ?>" type="date" class="form-control" id="endDate<?= $i ?>" placeholder="endDate">
-                                    <label for="endDate<?= $i ?>">End Date*</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-md-10">
-                                <div class="form-floating">
-                                    <input value="<?= $model["experiences"][$i]->getDescription() ?>" name="description<?= $i ?>" type="text" class="form-control" id="description<?= $i ?>" placeholder="description">
-                                    <label for="description<?= $i ?>">Description*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 text-end">
-                                <a href="/experience/delete/<?= $model["experiences"][$i]->getId() ?>" class="btn btn-link text-danger p-0" onclick="return confirm('Are you sure you want to delete this entry?');">
-                                    <i class="bi bi-trash-fill"></i> <!-- Ikon tong sampah merah -->
-                                </a>
-                            </div>
-                        </div>
-                    <?php } ?>
-
                     <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="type" class="form-control" id="type">
+                                    <option value="" selected>Choose</option>
+                                    <option value="Intern">Intern</option>
+                                    <option value="Work">Work</option>
+                                </select>
+                                <label for="type">Type*</label>
+                            </div>
+                        </div>
                         <div class="col-md-3">
                             <div class="form-floating">
                                 <input name="company" type="text" class="form-control" id="company" placeholder="company">
                                 <label for="company">Company*</label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-floating">
-                                <input name="type" type="text" class="form-control" id="type" placeholder="type">
-                                <label for="type">Type*</label>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -260,6 +311,14 @@
                         </div>
                     </div>
                     <div class="form-floating mb-3">
+                        <input name="address" type="text" class="form-control" id="address" placeholder="address">
+                        <label for="address">Address*</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input name="website" type="text" class="form-control" id="website" placeholder="website">
+                        <label for="website">Website</label>
+                    </div>
+                    <div class="form-floating mb-3">
                         <input name="description" type="text" class="form-control" id="description" placeholder="description">
                         <label for="description">Description*</label>
                     </div>
@@ -270,29 +329,36 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Skill</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/skill/<?= $model["student"]->getId() ?>">
-                    <?php for ($i = 0; $i < sizeof($model["skills"]); $i++) { ?>
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input value="<?= $model["skills"][$i]->getSkill() ?>" name="skill<?= $i ?>" type="text" class="form-control" id="skill<?= $i ?>" placeholder="Skill">
-                                    <label for="skill<?= $i ?>">Skill*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input value="<?= $model["skills"][$i]->getScore() ?>" name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
-                                    <label for="score<?= $i ?>">Score*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 text-end">
-                                <a href="/skill/delete/<?= $model["skills"][$i]->getId() ?>" class="btn btn-link text-danger p-0" onclick="return confirm('Are you sure you want to delete this skill?');">
-                                    <i class="bi bi-trash-fill"></i> <!-- Ikon tong sampah merah -->
-                                </a>
-                            </div>
-                        </div>
-                    <?php } ?>
 
+                <?php if (sizeof($model["skills"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data skill found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Skill</th>
+                                        <th class="text-center" scope="col">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["skills"] as $skill) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle"><?= $skill->getSkill() ?></td>
+                                            <td class="text-center align-middle"><?= $skill->getScore() ?></td>
+                                            
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/skill/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -314,28 +380,35 @@
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Language</h1>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/language/<?= $model["student"]->getId() ?>">
-                    <?php for ($i = 0; $i < sizeof($model["languages"]); $i++) { ?>
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input value="<?= $model["languages"][$i]->getLanguage() ?>" name="language<?= $i ?>" type="text" class="form-control" id="language<?= $i ?>" placeholder="Language">
-                                    <label for="language<?= $i ?>">Language*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input value="<?= $model["languages"][$i]->getScore() ?>" name="score<?= $i ?>" type="number" class="form-control" id="score<?= $i ?>" placeholder="Score">
-                                    <label for="score<?= $i ?>">Score*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 text-end">
-                                <a href="/language/delete/<?= $model["languages"][$i]->getId() ?>" class="btn btn-link text-danger p-0" onclick="return confirm('Are you sure you want to delete this language?');">
-                                    <i class="bi bi-trash-fill"></i> <!-- Ikon tong sampah merah -->
-                                </a>
-                            </div>
+                <?php if (sizeof($model["languages"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data language found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Language</th>
+                                        <th class="text-center" scope="col">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["languages"] as $language) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle"><?= $language->getLanguage() ?></td>
+                                            <td class="text-center align-middle"><?= $language->getScore() ?></td>
+                                            
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
-                    <?php } ?>
+                    </div>
+                <?php } ?>
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/language/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -356,10 +429,114 @@
         </div>
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
+                <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Social Media</h1>
+                <?php if (sizeof($model["socialMedias"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data social media found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Platform</th>
+                                        <th class="text-center" scope="col">URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["socialMedias"] as $socialMedia) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle"><?= $socialMedia->getPlatform() ?></td>
+                                            <td class="text-center align-middle"><?= $socialMedia->getURL() ?></td>
+                                            
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
+                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/socialMedia/<?= $model["student"]->getId() ?>">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select name="platform" class="form-select" id="platform" required>
+                                    <option value="" disabled selected>Select a platform</option>
+                                    <option value="facebook">Facebook</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="twitter">Twitter</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="youtube">YouTube</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="snapchat">Snapchat</option>
+                                    <option value="pinterest">Pinterest</option>
+                                    <option value="reddit">Reddit</option>
+                                </select>
+                                <label for="platform">Platform*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input name="url" type="text" class="form-control" id="url" placeholder="url">
+                                <label for="url">URL*</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Add Social Media</button>
+                </form>
+            </div>
+        </div>
+        <div class="row align-items-center g-lg-5 py-5">
+            <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Portofolio</h1>
+                <?php if (sizeof($model["portofolios"]) == 0) { ?>
+                    <h1 class="display-10 lh-1 mb-3 text-center">--No data portofolio found--</h1>
+                <?php } else { ?>
+                    <div class="row align-items-right g-lg-5 py-5">
+                        <div class="mx-auto">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">No</th>
+                                        <th class="text-center" scope="col">Preview</th>
+                                        <th class="text-center" scope="col">Type</th>
+                                        <th class="text-center" scope="col">Portofolio Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($model["portofolios"] as $portofolio) { ?>
+                                        <tr>
+                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                            <td class="text-center align-middle">
+                                                <?php if ($portofolio->getType() == "image") { ?>
+                                                    <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
+                                                        alt="Photo of <?= $model["student"]->getFullname() ?>"
+                                                        class="portfolio-media">
+                                                <?php } else if ($portofolio->getType() == "video") { ?>
+                                                    <video controls class="portfolio-media">
+                                                        <source src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
+                                                            type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                <?php } ?>
+                                            </td>
+                                            <td class="text-center align-middle"><?= $portofolio->getType() ?></td>
+                                            <td class="text-center align-middle"><?= $portofolio->getPortofolioName() ?></td>
+                                            
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                <?php } ?>
                 <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/portofolio/<?= $model["student"]->getId() ?>" enctype="multipart/form-data">
                     <div class="form-floating mb-3">
-                        <input name="portofolio" type="file" class="form-control" id="portofolio" accept="image/*,video/*" placeholder="Upload image or video">
+                        <input name="portofolio" type="file" class="form-control" id="portofolio" accept="image/*,video/*" placeholder="Upload image or video" required>
                         <label for="portofolio">Upload Image or Video*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Portofolio</button>

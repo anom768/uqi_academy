@@ -15,8 +15,8 @@ class EducationRepositoryImpl implements EducationRepository {
 
     public function add(Education $education): Education
     {
-        $statement = $this->connection->prepare("INSERT INTO educations (id_student, school, entry_year, graduate_year) VALUES (?,?,?,?)");
-        $statement->execute([$education->getIdStudent(), $education->getSchool(), $education->getEntryYear(), $education->getGraduateYear()]);
+        $statement = $this->connection->prepare("INSERT INTO educations (id_student, school, type, entry_year, graduate_year, address, description) VALUES (?,?,?,?,?,?,?)");
+        $statement->execute([$education->getIdStudent(), $education->getSchool(), $education->getType(), $education->getEntryYear(), $education->getGraduateYear(), $education->getAddress(), $education->getDescription()]);
 
         $education->setId($this->connection->lastInsertId());
         return $education;
@@ -31,7 +31,7 @@ class EducationRepositoryImpl implements EducationRepository {
         try {
             if ($rows = $statement->fetchAll()) {
                 foreach ($rows as $row) {
-                    $educations[] = new Education($row["id"], $row["id_student"], $row["school"], (int)$row["entry_year"], (int)$row["graduate_year"]);
+                    $educations[] = new Education($row["id"], $row["id_student"], $row["type"], $row["school"], (int)$row["entry_year"], (int)$row["graduate_year"], $row["address"], $row["description"]);
                 }
             }
             return $educations;

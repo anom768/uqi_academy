@@ -9,7 +9,7 @@ interface PortofolioRepository {
     function add(Portofolio $portofolio) :Portofolio;
     function getAll() :array;
     function getByIDStudent(string $id_student) :array;
-    function delete(string $id_student, string $portofolio) :void;
+    function delete(string $id) :void;
     function deleteAll() :void;
 
 }

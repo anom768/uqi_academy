@@ -9,5 +9,6 @@ interface SocialMediaRepository {
     function getByIDStudent(string $id_student) :array;
     function getAll() :array;
     function update(SocialMedia $newSocialMedia) :SocialMedia;
+    function delete(int $id):void;
     function deleteAll() :void;
 }

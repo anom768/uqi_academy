@@ -9,8 +9,13 @@ use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
 use com\bangkitanomsedhayu\uqi\academy\Entity\SocialMedia;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\ExperienceRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\LanguageRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepository;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepository;
@@ -33,7 +38,17 @@ class AddAdminTest extends TestCase {
         $this->sessionRepository = new SessionRepositoryImpl($connection);
         $this->socialMediaRepository = new SocialMediaRepositoryImpl($connection);
         $this->studentService = new StudentServiceImpl($this->studentRepository, $this->batchRepository);
+        $portofolioRepository = new PortofolioRepositoryImpl($connection);
+        $skillRepository = new SkillRepositoryImpl($connection);
+        $languageRepository = new LanguageRepositoryImpl($connection);
+        $educationRepository = new EducationRepositoryImpl($connection);
+        $experienceRepository = new ExperienceRepositoryImpl($connection);
 
+        $experienceRepository->deleteAll();
+        $educationRepository->deleteAll();
+        $skillRepository->deleteAll();
+        $languageRepository->deleteAll();
+        $portofolioRepository->deleteAll();
         $this->socialMediaRepository->deleteAll();
         $this->sessionRepository->deleteAll();
         $this->batchRepository->deleteAll();
@@ -41,20 +56,9 @@ class AddAdminTest extends TestCase {
     }
 
     private function studentRegistration() : StudentResponse {
-        $request = new StudentRegistration("bangkit.jpg", "BAS", "089", "jalan", "smk");
-        $student = $this->studentService->register($request, 2024, 1);
-
-        // $this->studentService->register()
-        return $student;
-    }
-
-    function testSetup() {
-        $student = $this->studentRegistration()->getStudent();
-        self::assertNotEmpty($student->getId());
-        self::assertNotEmpty($student->getPassword());
-
-        $batch = $this->batchRepository->getByIDStudent($student->getId());
-        self::assertEquals($batch->getIdStudent(), $student->getId());
+        $request = new StudentRegistration("blank.jpg", "Admin", "admin", "admin", "admin");
+        $response = $this->studentService->register($request, 2024, 1);
+        $student = $response->getStudent();
 
         $this->studentService->update(new StudentUpdate(
             $student->getId(),
@@ -67,6 +71,35 @@ class AddAdminTest extends TestCase {
             $student->getSchool(),
             $student->getStatus()
         ));
+
+        // $this->studentService->register()
+        return $response;
+    }
+
+    function testTruncateAll() {
+        $this->studentRegistration();
+        self::assertTrue(true);
+    }
+
+    function testSetup() {
+        $student = $this->studentRegistration()->getStudent();
+        self::assertNotEmpty($student->getId());
+        self::assertNotEmpty($student->getPassword());
+
+        $batch = $this->batchRepository->getByIDStudent($student->getId());
+        self::assertEquals($batch->getIdStudent(), $student->getId());
+
+        // $this->studentService->update(new StudentUpdate(
+        //     $student->getId(),
+        //     "rahasia",
+        //     $student->getPhoto(),
+        //     $student->getFullname(),
+        //     "3d", "mail", "bio",
+        //     $student->getPhone(),
+        //     $student->getAddress(),
+        //     $student->getSchool(),
+        //     $student->getStatus()
+        // ));
 
         $this->addDataStudents();
     }

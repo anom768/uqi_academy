@@ -14,9 +14,9 @@ class StudentRepositoryImpl implements StudentRepository {
     }
 
     function add(Student $student) :Student {
-        $statement = $this->connection->prepare("INSERT INTO students (id, password, temp_password, photo, fullname, phone, address, school, status) VALUES(?,?,?,?,?,?,?,?,?)");
+        $statement = $this->connection->prepare("INSERT INTO students (id, password, temp_password, photo, fullname, website, phone, address, school, status) VALUES(?,?,?,?,?,?,?,?,?,?)");
         $statement->execute([$student->getId(), $student->getPassword(), $student->getTempPassword(),
-        $student->getPhoto(), $student->getFullname(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
+        $student->getPhoto(), $student->getFullname(), $student->getWebsite(), $student->getPhone(), $student->getAddress(), $student->getSchool(), $student->getStatus()]);
         
         return $student;
     }

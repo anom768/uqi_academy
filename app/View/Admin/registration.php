@@ -31,15 +31,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/register">Register</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav></br>
     <div class="container col-xl-10 col-xl-8 px-0 py-5">
-        <?php if (isset($model['success'])) { ?>
+    <?php session_start();
+        if (isset($_SESSION['success'])) { ?>
             <div class="row">
                 <div class="alert alert-success" role="alert">
-                    <?= $model['success'] ?>
+                    <?= $_SESSION['success'] ?>
                 </div>
             </div>
         <?php } elseif (isset($model['error'])) { ?>
@@ -48,15 +52,12 @@
                     <?= $model['error'] ?>
                 </div>
             </div>
-        <?php } ?>
+        <?php }
+        unset($_SESSION["success"]); ?>
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-9">
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center">Registration Form</h1>
                 <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/register">
-                    <div class="form-floating mb-3">
-                        <input name="photo" type="text" class="form-control" id="photo" placeholder="photo">
-                        <label for="photo">Photo*</label>
-                    </div>
                     <div class="form-floating mb-3">
                         <input name="fullname" type="text" class="form-control" id="fullname" placeholder="fullname">
                         <label for="fullname">Full Name*</label>
@@ -66,7 +67,7 @@
                         <label for="phone">Phone*</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input name="address" type="number" class="form-control" id="address" placeholder="address">
+                        <input name="address" type="text" class="form-control" id="address" placeholder="address">
                         <label for="address">Address*</label>
                     </div>
                     <div class="form-floating mb-3">

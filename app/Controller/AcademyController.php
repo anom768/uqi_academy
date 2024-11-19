@@ -13,6 +13,7 @@ use com\bangkitanomsedhayu\uqi\academy\Repository\PortofolioRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SessionRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SkillRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\SocialMediaRepositoryImpl;
+use com\bangkitanomsedhayu\uqi\academy\Repository\StudentBatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\StudentRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\EducationService;
 use com\bangkitanomsedhayu\uqi\academy\Service\EducationServiceImpl;
@@ -28,6 +29,8 @@ use com\bangkitanomsedhayu\uqi\academy\Service\SkillService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SkillServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\SocialMediaService;
 use com\bangkitanomsedhayu\uqi\academy\Service\SocialMediaServiceImpl;
+use com\bangkitanomsedhayu\uqi\academy\Service\StudentBatchService;
+use com\bangkitanomsedhayu\uqi\academy\Service\StudentBatchServiceImpl;
 use com\bangkitanomsedhayu\uqi\academy\Service\StudentService;
 use com\bangkitanomsedhayu\uqi\academy\Service\StudentServiceImpl;
 use Exception;
@@ -42,6 +45,7 @@ class AcademyController {
     private EducationService $educationService;
     private ExperienceService $experienceService;
     private PortofolioService $portofolioService;
+    private StudentBatchService $studentBatchServcice;
 
     public function __construct()
     {
@@ -55,12 +59,14 @@ class AcademyController {
         $educationRepository = new EducationRepositoryImpl($connection);
         $experienceRepository = new ExperienceRepositoryImpl($connection);
         $portofolioRepository = new PortofolioRepositoryImpl($connection);
+        $studentBatchRepository = new StudentBatchRepositoryImpl($connection);
         
+        $this->studentBatchServcice = new StudentBatchServiceImpl($studentBatchRepository);
         $this->portofolioService = new PortofolioServiceImpl($portofolioRepository);
         $this->experienceService = new ExperienceServiceImpl($experienceRepository);
         $this->studentService = new StudentServiceImpl($studentRepository, $batchRepository);
         $this->socialMediaService = new SocialMediaServiceImpl($socialMediaRepository);
-        $this->sessionService = new SessionServiceImpl($sessionRepository, $studentRepository);
+        $this->sessionService = new SessionServiceImpl($sessionRepository, $studentBatchRepository);
         $this->skillService = new SkillServiceImpl($skillRepository);
         $this->languageService = new LanguageServiceImpl($languageRepository);
         $this->educationService = new EducationServiceImpl($educationRepository);
@@ -68,14 +74,13 @@ class AcademyController {
 
     public function getLogin() {
         $student = $this->sessionService->current();
-        
 
         if ($student == null) {
             View::render("login", [
                 "title" => "UQI Academy"
             ]);
         } else if ($student->getId() == "2401-001") {
-            $students = $this->studentService->getAll()->getStudent();
+            $students = $this->studentBatchServcice->getAll()->getStudentBatch();
             unset($students[0]);
             View::render("Admin/dashboard", [
                 "title" => "UQI Academy | Admin Dashboard",
@@ -83,6 +88,8 @@ class AcademyController {
             ]);
         } else {
             // ke student
+            $student = $this->studentBatchServcice->getByID($student->getId())->getStudentBatch();
+            // var_dump($student);
             $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
             $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
             $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -107,7 +114,7 @@ class AcademyController {
         $request = new StudentLogin($_POST["id"], $_POST["password"]);
         
         try {
-            $student = $this->studentService->login($request)->getStudent();
+            $student = $this->studentBatchServcice->getByID($this->studentService->login($request)->getStudent()->getId())->getStudentBatch();
             $this->sessionService->create($student->getId());
             View::redirect("/");
         } catch (Exception $exception) {

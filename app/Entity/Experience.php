@@ -12,16 +12,20 @@ class Experience {
     private string $company;
     private string $entry_date;
     private string $end_date;
+    private string $address;
+    private string $website;
     private string $description;
 
     // Constructor
-    public function __construct(int $id = 0, string $id_student, string $type, string $company, string $entry_date, string $end_date, string $description) {
+    public function __construct(int $id = 0, string $id_student, string $type, string $company, string $entry_date, string $end_date, string $address, string $website, string $description) {
         $this->id = $id;
         $this->id_student = $id_student;
         $this->type = $type;
         $this->company = $company;
         $this->entry_date = $entry_date;
         $this->end_date = $end_date;
+        $this->address = $address;
+        $this->website = $website;
         $this->description = $description;
     }
 
@@ -58,6 +62,14 @@ class Experience {
     // Getter untuk year
     public function getEndDate(): string {
         return $this->end_date;
+    }
+
+    public function getAddress(): string {
+        return $this->address;
+    }
+
+    public function getWebsite(): string {
+        return $this->website;
     }
 
     // Getter untuk registration_date

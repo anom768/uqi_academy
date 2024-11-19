@@ -66,6 +66,12 @@ class SocialMediaRepositoryImpl implements SocialMediaRepository {
         return $newSocialMedia;
     }
 
+    public function delete(int $id): void
+    {
+        $statement = $this->connection->prepare("DELETE FROM social_media WHERE id = ?");
+        $statement->execute([$id]);
+    }
+
     public function deleteAll(): void
     {
         $statement = $this->connection->prepare("TRUNCATE TABLE social_media");

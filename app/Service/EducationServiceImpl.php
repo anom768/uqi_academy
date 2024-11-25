@@ -6,6 +6,7 @@ use com\bangkitanomsedhayu\uqi\academy\Config\Database;
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationArrayResponse;
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationResponse;
+use com\bangkitanomsedhayu\uqi\academy\DTO\EducationUpdateRequest;
 use com\bangkitanomsedhayu\uqi\academy\Entity\Education;
 use com\bangkitanomsedhayu\uqi\academy\Helper\ServiceHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepository;
@@ -42,6 +43,24 @@ class EducationServiceImpl implements EducationService {
     public function getByIdStudent(string $id_student): EducationArrayResponse
     {
         return new EducationArrayResponse($this->educationRepository->getByIdStudent($id_student));
+    }
+
+    public function update(EducationUpdateRequest $request): EducationResponse
+    {
+        ServiceHelper::educationUpdateCheck($request);
+        try {
+            Database::beginTransaction();
+            $education = new Education($request->getId(), $request->getIdStudent(), $request->getType(), $request->getSchool(), $request->getEntryYear(), $request->getGraduateYear(), $request->getAddress(), $request->getDescriptiom());
+            $this->educationRepository->update($education);
+
+            $educationResponse = new EducationResponse($education);
+            
+            Database::commitTransaction();
+            return $educationResponse;
+        } catch (Exception $exception) {
+            Database::rollbackTransaction();
+            throw $exception;
+        }
     }
 
     public function delete(int $id)

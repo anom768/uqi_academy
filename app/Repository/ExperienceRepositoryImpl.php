@@ -40,6 +40,13 @@ class ExperienceRepositoryImpl implements ExperiencesRepository {
         }
     }
 
+    public function update(Experience $newExperience): Experience
+    {
+        $statement = $this->connection->prepare("UPDATE experiences SET type = ?, company = ?, entry_date = ?, end_date = ?, address = ?, website = ?, description = ? WHERE id = ?");
+        $statement->execute([$newExperience->getType(), $newExperience->getCompany(), $newExperience->getEntryDate(), $newExperience->getEndDate(), $newExperience->getAddress(), $newExperience->getWebsite(), $newExperience->getDescription(), $newExperience->getId()]);
+        return $newExperience;
+    }
+
     public function delete(int $id): void
     {
         $statement = $this->connection->prepare("DELETE FROM experiences WHERE id = ?");

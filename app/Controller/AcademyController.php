@@ -77,7 +77,7 @@ class AcademyController {
 
         if ($student == null) {
             View::render("login", [
-                "title" => "UQI Academy"
+                "title" => "UQI Academy | Login"
             ]);
         } else if ($student->getId() == "2401-001") {
             $students = $this->studentBatchServcice->getAll()->getStudentBatch();
@@ -119,7 +119,7 @@ class AcademyController {
             View::redirect("/");
         } catch (Exception $exception) {
             View::render("login", [
-                "title" => "UQI Academy",
+                "title" => "UQI Academy | Login",
                 "error" => $exception->getMessage()
             ]);
         }

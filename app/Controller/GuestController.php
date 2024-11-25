@@ -4,14 +4,6 @@ namespace com\bangkitanomsedhayu\uqi\academy\Controller;
 
 use com\bangkitanomsedhayu\uqi\academy\App\View;
 use com\bangkitanomsedhayu\uqi\academy\Config\Database;
-use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
-use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
-use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
-use com\bangkitanomsedhayu\uqi\academy\Helper\ControllerHelper;
 use com\bangkitanomsedhayu\uqi\academy\Repository\BatchRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\EducationRepositoryImpl;
 use com\bangkitanomsedhayu\uqi\academy\Repository\ExperienceRepositoryImpl;
@@ -84,8 +76,8 @@ class GuestController
     {
         $id = $id1 . "-" . $id2;
         $student = $this->studentbatchService->getByID($id)->getStudentBatch();
-
-        if ($student != null) {
+        
+        if ($student != null && $student->getId() != "2401-001") {
             $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
             $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
             $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
@@ -103,10 +95,7 @@ class GuestController
                 "portofolios" => $portofolios
             ]);
         } else {
-            View::render("Guest/dashboard", [
-                "title" => "UQI Academy | Student Profile",
-                "error" => "Student with id " . $id . " not found"
-            ]);
+            echo "Student Not Found";
         }
     }
 }

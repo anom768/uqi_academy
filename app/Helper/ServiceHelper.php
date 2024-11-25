@@ -3,11 +3,16 @@
 namespace com\bangkitanomsedhayu\uqi\academy\Helper;
 
 use com\bangkitanomsedhayu\uqi\academy\DTO\EducationRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\EducationUpdateRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceUpdateRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageUpdateRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\PortofolioRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SkillRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SkillUpdateRequest;
 use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaUpdate;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentLogin;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdate;
@@ -86,7 +91,27 @@ class ServiceHelper {
         }
     }
 
+    public static function skillUpdateCheck(SkillUpdateRequest $request) {
+        if (trim($request->getSkill()) == "" || $request->getSkill() == null) {
+            throw new Exception("Skill name is required");
+        }
+
+        if ($request->getScore() < 0 || $request->getScore() > 10) {
+            throw new Exception("Score must between 0 to 10");
+        }
+    }
+
     public static function languageAddCheck(LanguageRequest $request) {
+        if (trim($request->getLanguage()) == "" || $request->getLanguage() == null) {
+            throw new Exception("Language name is required");
+        }
+
+        if ($request->getScore() < 0 || $request->getScore() > 10) {
+            throw new Exception("Score must between 0 to 10");
+        }
+    }
+
+    public static function languageUpdateCheck(LanguageUpdateRequest $request) {
         if (trim($request->getLanguage()) == "" || $request->getLanguage() == null) {
             throw new Exception("Language name is required");
         }
@@ -112,7 +137,34 @@ class ServiceHelper {
         }
     }
 
+    public static function educationUpdateCheck(EducationUpdateRequest $request) {
+        if (trim($request->getSchool()) == "" || $request->getSchool() == null ||
+            trim($request->getEntryYear()) == "" || $request->getEntryYear() == null ||
+            trim($request->getGraduateYear()) == "" || $request->getGraduateYear() == null ||
+            trim($request->getType()) == "" || trim($request->getAddress()) == "" || $request->getAddress() == null) {
+            throw new Exception("All data is required");
+        }
+
+        if (strlen($request->getEntryYear()) < 4 || strlen($request->getEntryYear()) > 4 ||
+            strlen($request->getGraduateYear()) < 4 || strlen($request->getGraduateYear()) > 4 ||
+            $request->getEntryYear() < 2000 || $request->getGraduateYear() < 2000 ||
+            $request->getEntryYear() > date("Y") || $request->getEntryYear() >= $request->getGraduateYear()) {
+                throw new Exception("Entry date or graduate date is invalid");
+        }
+    }
+
     public static function experienceAddCheck(ExperienceRequest $request) {
+        if (trim($request->getCompany()) == "" || $request->getCompany() == null ||
+            trim($request->getType()) == "" || $request->getType() == null ||
+            trim($request->getEntryDate()) == "" || $request->getEntryDate() == null ||
+            trim($request->getEndDate()) == "" || $request->getEndDate() == null ||
+            trim($request->getAddress()) == "" || $request->getAddress() == null) {
+            throw new Exception("All data is required");
+        }
+
+    }
+
+    public static function experienceUpdateCheck(ExperienceUpdateRequest $request) {
         if (trim($request->getCompany()) == "" || $request->getCompany() == null ||
             trim($request->getType()) == "" || $request->getType() == null ||
             trim($request->getEntryDate()) == "" || $request->getEntryDate() == null ||
@@ -175,6 +227,13 @@ class ServiceHelper {
     }
 
     public static function socialMediaAddCheck(SocialMediaRequest $request) {
+        if (trim($request->getPlatform()) == "" || $request->getPlatform() == null ||
+            trim($request->getUrl()) == "" || $request->getUrl() == null) {
+                throw new Exception("All data is required");
+        }
+    }
+
+    public static function socialMediaUpdateCheck(SocialMediaUpdate $request) {
         if (trim($request->getPlatform()) == "" || $request->getPlatform() == null ||
             trim($request->getUrl()) == "" || $request->getUrl() == null) {
                 throw new Exception("All data is required");

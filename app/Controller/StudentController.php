@@ -86,14 +86,15 @@ class StudentController
     {
         $id = $id1 . "-" . $id2;
         $student = $this->studentBatchService->getByID($id)->getStudentBatch();
-        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
-        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
-        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
-        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
-        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
-        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
 
         if ($student != null) {
+            $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
+            $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
+            $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
+            $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
+            $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+            $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
+
             View::render("Student/profile", [
                 "title" => "UQI Academy | Student Profile",
                 "student" => $student,
@@ -104,6 +105,8 @@ class StudentController
                 "experiences" => $experiences,
                 "portofolios" => $portofolios
             ]);
+        } else {
+            View::redirect("/");
         }
     }
 
@@ -233,14 +236,6 @@ class StudentController
         );
     }
 
-    public function deleteEducation(int $id) {
-        $this->deleteFunction($id, "Delete education successfull", $this->educationService);
-    }
-
-    public function deleteExperience(int $id) {
-        $this->deleteFunction($id, "Delete experience successfull", $this->experienceService);
-    }
-
     public function deleteSkill(int $id) {
         $this->deleteFunction($id, "Delete skill successfull", $this->skillService);
     }
@@ -255,15 +250,6 @@ class StudentController
 
     public function deletePortofolio(string $id) {
         $this->deleteFunction($id, "Delete portofolio successfull", $this->portofolioService);
-    }
-
-    public function updateEducation() {
-        $data = $_POST;
-        foreach ($data["type"] as $id => $type) {
-            echo "ID : " . $id;
-            echo "Type : " . $type;
-            echo "School : " . $data["school"][$id];
-        }
     }
 
     private function addFunction($request, string $success, $service) {

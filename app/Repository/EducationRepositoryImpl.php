@@ -40,6 +40,14 @@ class EducationRepositoryImpl implements EducationRepository {
         }
     }
 
+    public function update(Education $newEducation): Education
+    {
+        $statement = $this->connection->prepare("UPDATE educations SET type = ?, school = ?, entry_year = ?, graduate_year = ?, address = ?, description = ? WHERE id = ?");
+        $statement->execute([$newEducation->getType(), $newEducation->getSchool(), $newEducation->getEntryYear(), $newEducation->getGraduateYear(), $newEducation->getAddress(), $newEducation->getDescription(), $newEducation->getId()]);
+
+        return $newEducation;
+    }
+
     public function delete(int $id): void
     {
         $statement = $this->connection->prepare("DELETE FROM educations WHERE id = ?");

@@ -4,6 +4,11 @@ namespace com\bangkitanomsedhayu\uqi\academy\Controller;
 
 use com\bangkitanomsedhayu\uqi\academy\App\View;
 use com\bangkitanomsedhayu\uqi\academy\Config\Database;
+use com\bangkitanomsedhayu\uqi\academy\DTO\EducationUpdateRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\ExperienceUpdateRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\LanguageUpdateRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SkillUpdateRequest;
+use com\bangkitanomsedhayu\uqi\academy\DTO\SocialMediaUpdate;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentRegistration;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdatePassword;
 use com\bangkitanomsedhayu\uqi\academy\DTO\StudentUpdateProfile;
@@ -160,7 +165,6 @@ class AdminController {
 
     public function postPassword(string $id1, string $id2)
     {
-        // echo "MAUSK";
         $id = $id1 . "-" . $id2;
         $student = $this->studentBatchService->getByID($id)->getStudentBatch();
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
@@ -176,6 +180,122 @@ class AdminController {
             $this->studentService->updatePassword($request);
             session_start();
             $_SESSION["success"] = "Update password successfull";
+            View::redirect("/modify/profile" . "/" . $student->getId());
+        } catch (Exception $exception) {
+            View::render("Admin/profile", [
+                "title" => "UQI Academy | Student Profile",
+                "student" => $student,
+                "socialMedias" => $socialMedias,
+                "skills" => $skills,
+                "languages" => $languages,
+                "educations" => $educations,
+                "experiences" => $experiences,
+                "portofolios" => $portofolios,
+                "error" => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    public function updateEducation(int $id) {
+        $this->updateFunction("Update education successfull",
+            new EducationUpdateRequest($id, $_POST["idStudent"], $_POST["type"], $_POST["school"], (int)$_POST["entryYear"], (int)$_POST["graduateYear"], $_POST["address"], $_POST["description"])
+        , $this->educationService); 
+    }
+
+    public function deleteEducation(int $id) {
+        $this->deleteFunction($id, "Delete education successfull", $this->educationService);
+    }
+
+    public function updateExperience(int $id) {
+        $this->updateFunction("Update experience successfull",
+            new ExperienceUpdateRequest($id, $_POST["idStudent"], $_POST["type"], $_POST["company"], $_POST["entryDate"], $_POST["endDate"], $_POST["address"], $_POST["website"],  $_POST["description"])
+        , $this->experienceService); 
+    }
+
+    public function deleteExperience(int $id) {
+        $this->deleteFunction($id, "Delete experience successfull", $this->experienceService);
+    }
+
+    public function updateSkill(int $id) {
+        $this->updateFunction("Update skill successfull",
+            new SkillUpdateRequest($id, $_POST["idStudent"], $_POST["skill"], (int)$_POST["score"])
+        , $this->skillService); 
+    }
+
+    public function deleteSkill(int $id) {
+        $this->deleteFunction($id, "Delete skill successfull", $this->skillService);
+    }
+
+    public function updateLanguage(int $id) {
+        $this->updateFunction("Update language successfull",
+            new LanguageUpdateRequest($id, $_POST["idStudent"], $_POST["language"], (int)$_POST["score"])
+        , $this->languageService); 
+    }
+
+    public function deleteLanguage(int $id) {
+        $this->deleteFunction($id, "Delete language successfull", $this->languageService);
+    }
+
+    public function updateSocialMedia(int $id) {
+        $this->updateFunction("Update social media successfull",
+            new SocialMediaUpdate($id, $_POST["idStudent"], $_POST["platform"], $_POST["url"])
+        , $this->socialMediaService); 
+    }
+
+    public function deleteSocialMedia(int $id) {
+        $this->deleteFunction($id, "Delete social media successfull", $this->socialMediaService);
+    }
+
+    public function deletePortofolio(string $id) {
+        $this->deleteFunction($id, "Delete portofolio successfull", $this->portofolioService);
+    }
+
+    private function updateFunction(string $success, $request, $service) {
+        $student = $this->studentBatchService->getByID($_POST["idStudent"])->getStudentBatch();
+        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
+        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
+        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
+        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
+        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
+        
+        try {
+            $service->update($request);
+            session_start();
+            $_SESSION["success"] = $success;
+            View::redirect("/modify/profile" . "/" . $student->getId());
+        } catch (Exception $exception) {
+            View::render("Admin/profile", [
+                "title" => "UQI Academy | Student Profile",
+                "student" => $student,
+                "socialMedias" => $socialMedias,
+                "skills" => $skills,
+                "languages" => $languages,
+                "educations" => $educations,
+                "experiences" => $experiences,
+                "portofolios" => $portofolios,
+                "error" => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function deleteFunction($id, string $success, $service) {
+        $student = $this->studentBatchService->getByID($_POST["idStudent"])->getStudentBatch();
+        $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
+        $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
+        $languages = $this->languageService->getByIdStudent($student->getId())->getLanguages();
+        $educations = $this->educationService->getByIdStudent($student->getId())->getEducations();
+        $experiences = $this->experienceService->getByIdStudent($student->getId())->getExperience();
+        $portofolios = $this->portofolioService->getByIdStudent($student->getId())->getPortofolio();
+
+        try {
+            if ($service instanceof PortofolioServiceImpl) {
+                $targetDir = "img/uqi/academy/" . $student->getYear() . "/" . $student->getBatch() . "/" . $student->getId() . "/portofolio/";
+                ControllerHelper::deletePortofolio($targetDir, $id);
+            }
+            $service->delete($id);
+            session_start();
+            $_SESSION["success"] = $success;
             View::redirect("/modify/profile" . "/" . $student->getId());
         } catch (Exception $exception) {
             View::render("Admin/profile", [

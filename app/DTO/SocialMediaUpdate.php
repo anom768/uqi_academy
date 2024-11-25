@@ -4,15 +4,21 @@ namespace com\bangkitanomsedhayu\uqi\academy\DTO;
 
 class SocialMediaUpdate {
 
+    private int $id;
     private ?string $id_student;
     private ?string $platform;
     private ?string $url;
 
-    public function __construct(?string $id_student, ?string $platform, ?string $url)
+    public function __construct(int $id, ?string $id_student, ?string $platform, ?string $url)
     {
+        $this->id = $id;
         $this->id_student = $id_student;
         $this->platform = $platform;
         $this->url = $url;
+    }
+
+    public function getId() :int {
+        return $this->id;
     }
 
     // Getter untuk photo

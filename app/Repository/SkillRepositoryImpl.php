@@ -41,6 +41,14 @@ class SkillRepositoryImpl implements SkillRepository {
         }
     }
 
+    public function update(Skill $newSkill): Skill
+    {
+        $statement = $this->connection->prepare("UPDATE skills SET skill = ?, score = ? WHERE id = ?");
+        $statement->execute([$newSkill->getSkill(), $newSkill->getScore(), $newSkill->getId()]);
+
+        return $newSkill;
+    }
+
     public function delete(int $id): void
     {
         $statement = $this->connection->prepare("DELETE FROM skills WHERE id = ?");

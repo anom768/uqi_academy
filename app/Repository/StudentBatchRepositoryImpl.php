@@ -2,7 +2,6 @@
 
 namespace com\bangkitanomsedhayu\uqi\academy\Repository;
 
-use com\bangkitanomsedhayu\uqi\academy\Entity\Student;
 use com\bangkitanomsedhayu\uqi\academy\Entity\StudentBatch;
 
 class StudentBatchRepositoryImpl implements StudentBatchRepository {
@@ -14,7 +13,7 @@ class StudentBatchRepositoryImpl implements StudentBatchRepository {
         $this->connection = $connection;
     }
 
-    function getByID(string $id): StudentBatch
+    function getByID(string $id): ?StudentBatch
     {
         $statement = $this->connection->prepare("SELECT s.id as id, s.temp_password as temp_password, s.photo as photo, s.fullname as fullname, s.specialist as specialist, s.email as email, s.website as website, s.bio as bio, s.phone as phone, s.address as address, s.school as school, s.status as status, b.id as id_batch, b.year as year, b.batch as batch  FROM students as s JOIN batch as b ON (s.id = b.id_student) WHERE s.id = ?");
         $statement->execute([$id]);

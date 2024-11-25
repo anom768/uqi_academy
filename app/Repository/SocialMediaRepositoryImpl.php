@@ -60,8 +60,8 @@ class SocialMediaRepositoryImpl implements SocialMediaRepository {
 
     public function update(SocialMedia $newSocialMedia): SocialMedia
     {
-        $statement = $this->connection->prepare("UPDATE social_media SET url = ? WHERE id_student = ? AND platform = ?");
-        $statement->execute([$newSocialMedia->getUrl(), $newSocialMedia->getIdStudent(), $newSocialMedia->getPlatform()]);
+        $statement = $this->connection->prepare("UPDATE social_media SET platform = ?, url = ? WHERE id = ?");
+        $statement->execute([$newSocialMedia->getPlatform(), $newSocialMedia->getUrl(), $newSocialMedia->getId()]);
 
         return $newSocialMedia;
     }

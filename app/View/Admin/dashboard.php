@@ -102,13 +102,13 @@
     </div>
 
     <footer class="bg-light text-center text-lg-start">
-        <div class="container p-4">
-            <section class="mb-4">
-                <a class="btn btn-primary btn-lg m-1" href="https://www.facebook.com" role="button">Facebook</a>
-                <a class="btn btn-primary btn-lg m-1" href="https://www.twitter.com" role="button">Twitter</a>
-                <a class="btn btn-primary btn-lg m-1" href="https://www.instagram.com" role="button">Instagram</a>
-            </section>
-        </div>
+<!--        <div class="container p-4">-->
+<!--            <section class="mb-4">-->
+<!--                <a class="btn btn-primary btn-lg m-1" href="https://www.facebook.com" role="button">Facebook</a>-->
+<!--                <a class="btn btn-primary btn-lg m-1" href="https://www.twitter.com" role="button">Twitter</a>-->
+<!--                <a class="btn btn-primary btn-lg m-1" href="https://www.instagram.com" role="button">Instagram</a>-->
+<!--            </section>-->
+<!--        </div>-->
         <div class="text-center p-3 bg-light">
             © 2024 UQI Academy
         </div>

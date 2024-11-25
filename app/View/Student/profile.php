@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>PPDB Online - Registration Form</title>
+    <title><?= $model["title"] ?></title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -96,7 +96,7 @@
                         <label for="email">Email*</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input value="<?= $model["student"]->getWebsite() ?? "" ?>" name="website" type="text" class="form-control" id="website" placeholder="website" disabled>
+                        <input value="<?= "academy.uqistudios.com".$model["student"]->getWebsite() ?? "" ?>" name="website" type="text" class="form-control" id="website" placeholder="website" disabled>
                         <label for="website">Website*</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -285,8 +285,9 @@
                             <div class="form-floating">
                                 <select name="type" class="form-control" id="type">
                                     <option value="" selected>Choose</option>
-                                    <option value="Intern">Intern</option>
-                                    <option value="Work">Work</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Full-Time">Full-Time</option>
+                                    <option value="Part-Time">Part-Time</option>
                                 </select>
                                 <label for="type">Type*</label>
                             </div>

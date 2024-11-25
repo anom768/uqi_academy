@@ -51,9 +51,10 @@ class SocialMediaServiceImpl implements SocialMediaService {
 
     public function update(SocialMediaUpdate $request): SocialMediaResponse
     {
+        ServiceHelper::socialMediaUpdateCheck($request);
         try {
             Database::beginTransaction();
-            $socialMedia = new SocialMedia(0, $request->getIdStudent(), $request->getPlatform(), $request->getUrl());
+            $socialMedia = new SocialMedia($request->getId(), $request->getIdStudent(), $request->getPlatform(), $request->getUrl());
             $this->socialMediaRepository->update($socialMedia);
             Database::commitTransaction();
             return new SocialMediaResponse($socialMedia);

@@ -162,32 +162,64 @@
                                         <th class="text-center" scope="col">Graduate Year</th>
                                         <th class="text-center" scope="col">Address</th>
                                         <th class="text-center" scope="col">Description</th>
+                                        <th class="text-center" scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1;
                                     foreach ($model["educations"] as $education) { ?>
-                                        <tr>
-                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                            <td class="text-center align-middle"><?= $education->getType() ?></td>
-                                            <td class="text-center align-middle"><?= $education->getSchool() ?></td>
-                                            <td class="text-center align-middle"><?= $education->getEntryYear() ?></td>
-                                            <td class="text-center align-middle"><?= $education->getGraduateYear() ?></td>
-                                            <td class="text-center align-middle"><?= $education->getAddress() ?></td>
-                                            <td class="text-center align-middle"><?= $education->getDescription() ?></td>
-                                            <td class="text-center align-middle">
-                                                <form method="post">
-                                                    <button class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this education data?');" formaction="/education/delete/<?= $education->getId() ?>"><i class="bi bi-trash-fill"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                        <form method="post" action="/education/update/<?= $education->getId() ?>">
+                                            <tr>
+                                                <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                                <td class="text-center align-middle">
+                                                    <select name="type" class="form-select" id="type">
+                                                        <option value="" <?= $education->getType() === "" ? "selected" : "" ?>>Choose</option>
+                                                        <option value="SD" <?= $education->getType() === "SD" ? "selected" : "" ?>>SD</option>
+                                                        <option value="SMP" <?= $education->getType() === "SMP" ? "selected" : "" ?>>SMP</option>
+                                                        <option value="SMA" <?= $education->getType() === "SMA" ? "selected" : "" ?>>SMA</option>
+                                                        <option value="SMK" <?= $education->getType() === "SMK" ? "selected" : "" ?>>SMK</option>
+                                                        <option value="D1" <?= $education->getType() === "D1" ? "selected" : "" ?>>D1</option>
+                                                        <option value="D2" <?= $education->getType() === "D2" ? "selected" : "" ?>>D2</option>
+                                                        <option value="D3" <?= $education->getType() === "D3" ? "selected" : "" ?>>D3</option>
+                                                        <option value="S1" <?= $education->getType() === "S1" ? "selected" : "" ?>>S1</option>
+                                                        <option value="S2" <?= $education->getType() === "S2" ? "selected" : "" ?>>S2</option>
+                                                        <option value="S3" <?= $education->getType() === "S3" ? "selected" : "" ?>>S3</option>
+                                                    </select>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <input type="text" name="school" class="form-control" value="<?= $education->getSchool() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="number" name="entryYear" class="form-control" value="<?= $education->getEntryYear() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="number" name="graduateYear" class="form-control" value="<?= $education->getGraduateYear() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="text" name="address" class="form-control" value="<?= $education->getAddress() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <textarea name="description" class="form-control" rows="2"><?= $education->getDescription() ?></textarea>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="submit" class="btn btn-success" formaction="/modify/education/update/<?= $education->getId() ?>">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this education data?');" formaction="/modify/education/delete/<?= $education->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/education/<?= $model["student"]->getId() ?>">
+
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/education/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <div class="form-floating">
@@ -235,7 +267,7 @@
                         <label for="description">Description*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Education</button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div class="row align-items-center g-lg-5 py-5">
@@ -257,29 +289,60 @@
                                         <th class="text-center" scope="col">Address</th>
                                         <th class="text-center" scope="col">Website</th>
                                         <th class="text-center" scope="col">Description</th>
+                                        <th class="text-center" scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1;
                                     foreach ($model["experiences"] as $experience) { ?>
-                                        <tr>
-                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                            <td class="text-center align-middle"><?= $experience->getType() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getCompany() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getEntryDate() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getEndDate() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getAddress() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getWebsite() ?></td>
-                                            <td class="text-center align-middle"><?= $experience->getDescription() ?></td>
-                                
-                                        </tr>
+                                        <form method="post" action="/experience/update/<?= $experience->getId() ?>">
+                                            <tr>
+                                                <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                                <td class="text-center align-middle">
+                                                    <select name="type" class="form-select" id="type">
+                                                        <option value="" <?= $experience->getType() === "" ? "selected" : "" ?>>Choose</option>
+                                                        <option value="Full-Time" <?= $experience->getType() === "Full-Time" ? "selected" : "" ?>>Full-Time</option>
+                                                        <option value="Part-Time" <?= $experience->getType() === "Part-Time" ? "selected" : "" ?>>Part-Time</option>
+                                                        <option value="Internship" <?= $experience->getType() === "Internship" ? "selected" : "" ?>>Internship</option>
+                                                    </select>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <input type="text" name="company" class="form-control" value="<?= $experience->getCompany() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="date" name="entryDate" class="form-control" value="<?= $experience->getEntryDate() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="date" name="endDate" class="form-control" value="<?= $experience->getEndDate() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="text" name="address" class="form-control" value="<?= $experience->getAddress() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="url" name="website" class="form-control" value="<?= $experience->getWebsite() ?>" placeholder="https://example.com">
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <textarea name="description" class="form-control" rows="2"><?= $experience->getDescription() ?></textarea>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="submit" class="btn btn-success" formaction="/modify/experience/update/<?= $experience->getId() ?>">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this experience data?');" formaction="/modify/experience/delete/<?= $experience->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/experience/<?= $model["student"]->getId() ?>">
+
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/experience/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <div class="form-floating">
@@ -323,7 +386,7 @@
                         <label for="description">Description*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Experience</button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div class="row align-items-center g-lg-5 py-5">
@@ -341,24 +404,40 @@
                                         <th class="text-center" scope="col">No</th>
                                         <th class="text-center" scope="col">Skill</th>
                                         <th class="text-center" scope="col">Score</th>
+                                        <th class="text-center" scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1;
                                     foreach ($model["skills"] as $skill) { ?>
-                                        <tr>
-                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                            <td class="text-center align-middle"><?= $skill->getSkill() ?></td>
-                                            <td class="text-center align-middle"><?= $skill->getScore() ?></td>
-                                            
-                                        </tr>
+                                        <form method="post" action="/skill/update/<?= $skill->getId() ?>">
+                                            <tr>
+                                                <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                                <td class="text-center align-middle">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <input type="text" name="skill" class="form-control" value="<?= $skill->getSkill() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="number" name="score" class="form-control" value="<?= $skill->getScore() ?>" min="0" max="100" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="submit" class="btn btn-success" formaction="/modify/skill/update/<?= $skill->getId() ?>">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this skill data?');" formaction="/modify/skill/delete/<?= $skill->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/skill/<?= $model["student"]->getId() ?>">
+
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/skill/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -374,7 +453,7 @@
                         </div>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Skill</button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div class="row align-items-center g-lg-5 py-5">
@@ -391,24 +470,39 @@
                                         <th class="text-center" scope="col">No</th>
                                         <th class="text-center" scope="col">Language</th>
                                         <th class="text-center" scope="col">Score</th>
+                                        <th class="text-center" scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1;
                                     foreach ($model["languages"] as $language) { ?>
-                                        <tr>
-                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                            <td class="text-center align-middle"><?= $language->getLanguage() ?></td>
-                                            <td class="text-center align-middle"><?= $language->getScore() ?></td>
-                                            
-                                        </tr>
+                                        <form method="post" action="/language/update/<?= $language->getId() ?>">
+                                            <tr>
+                                                <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                                <td class="text-center align-middle">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <input type="text" name="language" class="form-control" value="<?= $language->getLanguage() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="number" name="score" class="form-control" value="<?= $language->getScore() ?>" min="0" max="100" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="submit" class="btn btn-success" formaction="/modify/language/update/<?= $language->getId() ?>">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this language data?');" formaction="/modify/language/delete/<?= $language->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/language/<?= $model["student"]->getId() ?>">
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/language/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -424,7 +518,7 @@
                         </div>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Language</button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div class="row align-items-center g-lg-5 py-5">
@@ -441,24 +535,50 @@
                                         <th class="text-center" scope="col">No</th>
                                         <th class="text-center" scope="col">Platform</th>
                                         <th class="text-center" scope="col">URL</th>
+                                        <th class="text-center" scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1;
                                     foreach ($model["socialMedias"] as $socialMedia) { ?>
-                                        <tr>
-                                            <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
-                                            <td class="text-center align-middle"><?= $socialMedia->getPlatform() ?></td>
-                                            <td class="text-center align-middle"><?= $socialMedia->getURL() ?></td>
-                                            
-                                        </tr>
+                                        <form method="post" action="/socialMedia/update/<?= $socialMedia->getId() ?>">
+                                            <tr>
+                                                <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
+                                                <td class="text-center align-middle">
+                                                    <select name="platform" class="form-select" id="platform" required>
+                                                        <option value="" disabled <?= $socialMedia->getPlatform() === "" ? "selected" : "" ?>>Select a platform</option>
+                                                        <option value="facebook" <?= $socialMedia->getPlatform() === "facebook" ? "selected" : "" ?>>Facebook</option>
+                                                        <option value="instagram" <?= $socialMedia->getPlatform() === "instagram" ? "selected" : "" ?>>Instagram</option>
+                                                        <option value="twitter" <?= $socialMedia->getPlatform() === "twitter" ? "selected" : "" ?>>Twitter</option>
+                                                        <option value="linkedin" <?= $socialMedia->getPlatform() === "linkedin" ? "selected" : "" ?>>LinkedIn</option>
+                                                        <option value="youtube" <?= $socialMedia->getPlatform() === "youtube" ? "selected" : "" ?>>YouTube</option>
+                                                        <option value="tiktok" <?= $socialMedia->getPlatform() === "tiktok" ? "selected" : "" ?>>TikTok</option>
+                                                        <option value="snapchat" <?= $socialMedia->getPlatform() === "snapchat" ? "selected" : "" ?>>Snapchat</option>
+                                                        <option value="pinterest" <?= $socialMedia->getPlatform() === "pinterest" ? "selected" : "" ?>>Pinterest</option>
+                                                        <option value="reddit" <?= $socialMedia->getPlatform() === "reddit" ? "selected" : "" ?>>Reddit</option>
+                                                    </select>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <input type="url" name="url" class="form-control" value="<?= $socialMedia->getURL() ?>" required>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="submit" class="btn btn-success" formaction="/modify/socialMedia/update/<?= $socialMedia->getId() ?>">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this social media data?');" formaction="/modify/socialMedia/delete/<?= $socialMedia->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/socialMedia/<?= $model["student"]->getId() ?>">
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/socialMedia/<?= $model["student"]->getId() ?>">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -485,7 +605,7 @@
                         </div>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Social Media</button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div class="row align-items-center g-lg-5 py-5">
@@ -525,7 +645,12 @@
                                             </td>
                                             <td class="text-center align-middle"><?= $portofolio->getType() ?></td>
                                             <td class="text-center align-middle"><?= $portofolio->getPortofolioName() ?></td>
-                                            
+                                            <td class="text-center align-middle">
+                                                <form method="post">
+                                                    <input type="hidden" name="idStudent" class="form-control" value="<?= $model["student"]->getId() ?>">
+                                                    <button class="btn btn-danger" formaction="/modify/portofolio/delete/<?= $portofolio->getId() ?>"><i class="bi bi-trash-fill"></i></button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
@@ -534,13 +659,13 @@
                         </div>
                     </div>
                 <?php } ?>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/portofolio/<?= $model["student"]->getId() ?>" enctype="multipart/form-data">
+                <!-- <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/portofolio/<?= $model["student"]->getId() ?>" enctype="multipart/form-data">
                     <div class="form-floating mb-3">
                         <input name="portofolio" type="file" class="form-control" id="portofolio" accept="image/*,video/*" placeholder="Upload image or video" required>
                         <label for="portofolio">Upload Image or Video*</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Add Portofolio</button>
-                </form>
+                </form> -->
             </div>
         </div>
     </div>

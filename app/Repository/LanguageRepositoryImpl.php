@@ -41,6 +41,13 @@ class LanguageRepositoryImpl implements LanguageRepository {
         }
     }
 
+    public function update(Language $newLanguage): Language
+    {
+        $statement = $this->connection->prepare("UPDATE languages SET language = ?, score = ? WHERE id = ?");
+        $statement->execute([$newLanguage->getLanguage(), $newLanguage->getScore(), $newLanguage->getId()]);
+        return $newLanguage;
+    }
+
     public function delete(int $id): void
     {
         $statement = $this->connection->prepare("DELETE FROM languages WHERE id = ?");

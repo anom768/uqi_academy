@@ -131,7 +131,7 @@
                             <p><i class="bi bi-telephone-fill"></i> <?= $model["student"]->getPhone() ?></p>
                             <p><i class="bi bi-envelope-fill"></i> <?= $model["student"]->getEmail() ?? "(edit your email)" ?></p>
                             <p><i class="bi bi-geo-alt-fill"></i> <?= $model["student"]->getAddress() ?></p>
-                            <p><i class="bi bi-globe"></i><a target="_blank" href="<?= $model["student"]->getWebsite() ?>"> <?= $model["student"]->getWebsite() ?? "(edit your website)" ?></a> </p>
+                            <p><i class="bi bi-globe"></i><a target="_blank" href="<?= $model["student"]->getWebsite() ?>"> <?= "academy.uqistudios.com".$model["student"]->getWebsite() ?? "(edit your website)" ?></a> </p>
                         </div>
 
                         <!-- Skills -->
@@ -316,13 +316,13 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <footer class="bg-light text-center text-lg-start">
-            <div class="container p-4">
-                <section class="mb-4">
-                    <a class="btn btn-primary btn-lg m-1" href="https://www.facebook.com" role="button">Facebook</a>
-                    <a class="btn btn-primary btn-lg m-1" href="https://www.twitter.com" role="button">Twitter</a>
-                    <a class="btn btn-primary btn-lg m-1" href="https://www.instagram.com" role="button">Instagram</a>
-                </section>
-            </div>
+<!--            <div class="container p-4">-->
+<!--                <section class="mb-4">-->
+<!--                    <a class="btn btn-primary btn-lg m-1" href="https://www.facebook.com" role="button">Facebook</a>-->
+<!--                    <a class="btn btn-primary btn-lg m-1" href="https://www.twitter.com" role="button">Twitter</a>-->
+<!--                    <a class="btn btn-primary btn-lg m-1" href="https://www.instagram.com" role="button">Instagram</a>-->
+<!--                </section>-->
+<!--            </div>-->
             <div class="text-center p-3 bg-light">
                 © 2024 UQI Academy
             </div>

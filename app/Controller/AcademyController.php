@@ -125,10 +125,6 @@ class AcademyController {
         }
     }
 
-    public function postRegister() {
-        View::redirect("/");
-    }
-
     public function logout()
     {
         $this->sessionService->destroy();

@@ -100,7 +100,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
+                <img src="https://storage.googleapis.com/uqiacademytestbucket/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
                 UQI Academy
             </a>
         </div>
@@ -117,9 +117,9 @@
                     <div class="col-md-4 bg-dark-blue text-white text-center p-4 rounded-start">
                         </br>
                         <?php if ($model["student"]->getPhoto() == "blank.jpg") { ?>
-                            <img src="/img/blank.jpg" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                            <img src="https://storage.googleapis.com/uqiacademytestbucket/img/blank.jpg" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
                         <?php } else { ?>
-                            <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/' . $model["student"]->getPhoto() ?>" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                            <img src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/' . $model["student"]->getPhoto() ?>" alt="Photo of <?= $model["student"]->getFullname() ?>" width="100" height="auto" class="img-fluid">
                         <?php } ?>
                         <h2 class="mb-3"><?= $model["student"]->getFullname() ?></h2>
                         <p><?= $model["student"]->getSpecialist() ?? "(edit your specialist)" ?></p>
@@ -248,15 +248,15 @@
                 for ($i = 0; $i < sizeof($model["portofolios"]); $i++) {
                     if ($model["portofolios"][$i]->getType() == "image") { ?>
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="image" data-src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
-                                <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="image" data-src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
+                                <img src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" alt="Image 1">
                             </div>
                         </div>
                     <?php } else if ($model["portofolios"][$i]->getType() == "video") { ?>
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="video" data-src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
+                            <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#mediaModal" data-type="video" data-src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
                                 <video muted>
-                                    <source src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
+                                    <source src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $model["portofolios"][$i]->getId() . $model["portofolios"][$i]->getPortofolioName() ?>" type="video/mp4">
                                 </video>
                             </div>
                         </div>

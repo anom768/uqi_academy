@@ -17,7 +17,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
+                <img src="https://storage.googleapis.com/uqiacademytestbucket/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
                 UQI Academy
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -75,9 +75,9 @@
                                     <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
                                     <td class="text-center align-middle">
                                         <?php if ($student->getPhoto() == "blank.jpg") {?>
-                                            <img src="/img/blank.jpg" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                                            <img src="https://storage.googleapis.com/uqiacademytestbucket/img/blank.jpg" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
                                         <?php } else { ?>
-                                            <img src="/img/uqi/academy/<?= $student->getYear().'/'.$student->getBatch().'/'.$student->getId().'/'.$student->getPhoto() ?>" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
+                                            <img src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $student->getYear().'/'.$student->getBatch().'/'.$student->getId().'/'.$student->getPhoto() ?>" alt="Photo of <?= $student->getFullname() ?>" width="100" height="auto" class="img-fluid">
                                         <?php } ?>
                                     </td>
                                     <td class="text-center align-middle">

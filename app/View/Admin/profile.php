@@ -29,7 +29,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
+                <img src="https://storage.googleapis.com/uqiacademytestbucket/img/logo_uqi.png" alt="UQI Academy Logo" width="auto" height="30" class="d-inline-block align-text-top">
                 UQI Academy
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -632,12 +632,12 @@
                                             <th class="text-center align-middle" scope="row"><?= $index++ ?></th>
                                             <td class="text-center align-middle">
                                                 <?php if ($portofolio->getType() == "image") { ?>
-                                                    <img src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
+                                                    <img src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
                                                         alt="Photo of <?= $model["student"]->getFullname() ?>"
                                                         class="portfolio-media">
                                                 <?php } else if ($portofolio->getType() == "video") { ?>
                                                     <video controls class="portfolio-media">
-                                                        <source src="/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
+                                                        <source src="https://storage.googleapis.com/uqiacademytestbucket/img/uqi/academy/<?= $model["student"]->getYear() . '/' . $model["student"]->getBatch() . '/' . $model["student"]->getId() . '/portofolio/' . $portofolio->getId() . $portofolio->getPortofolioName() ?>"
                                                             type="video/mp4">
                                                         Your browser does not support the video tag.
                                                     </video>

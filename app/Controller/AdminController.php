@@ -129,7 +129,7 @@ class AdminController {
     public function postProfile(string $id1, string $id2)
     {
         $id = $id1."-".$id2;
-        $fileName = ControllerHelper::saveImageProfile($_POST["currentimage"], "img/uqi/academy/2024/1/".$id."/", $_FILES["photo"] );
+        $fileName = ControllerHelper::saveImageProfile($_POST["currentimage"], "uqiacademytestbucket", "img/uqi/academy/2024/1/".$id."/", $_FILES["photo"] );
         $student = $this->studentBatchService->getByID($id)->getStudentBatch();    
         $socialMedias = $this->socialMediaService->getbyIdStudent($student->getId())->getSocialMedias();
         $skills = $this->skillService->getByIdStudent($student->getId())->getSkills();
@@ -291,7 +291,7 @@ class AdminController {
         try {
             if ($service instanceof PortofolioServiceImpl) {
                 $targetDir = "img/uqi/academy/" . $student->getYear() . "/" . $student->getBatch() . "/" . $student->getId() . "/portofolio/";
-                ControllerHelper::deletePortofolio($targetDir, $id);
+                ControllerHelper::deletePortofolio("uqiacademytestbucket", $targetDir, $id);
             }
             $service->delete($id);
             session_start();

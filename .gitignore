@@ -1,6 +1,5 @@
 # Direktori vendor yang dihasilkan oleh Composer
 /vendor/
-config/*
 
 # File Composer lock yang spesifik untuk lingkungan lokal
 /composer.lock

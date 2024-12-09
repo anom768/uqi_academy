@@ -1,28 +1,31 @@
-# Gunakan gambar PHP dengan Apache
-FROM php:8.2-apache
+# Gunakan image PHP resmi dengan Apache
+FROM php:8.1-apache
 
-# Aktifkan modul Apache Rewrite (jika diperlukan)
-RUN a2enmod rewrite
-
-# Install Composer dan ekstensi PHP yang diperlukan
+# Install ekstensi PHP yang diperlukan untuk Composer
 RUN apt-get update && apt-get install -y \
-    unzip libzip-dev libicu-dev \
-    && docker-php-ext-install intl zip \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
 
-# Salin file proyek ke dalam container
-WORKDIR /var/www/html
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install pdo_mysql mbstring
+
+# Set working directory
+WORKDIR /app
+
+# Salin semua file ke dalam container
+COPY composer.json .
+
+RUN composer install --no-scripts
+
 COPY . .
 
-# Install dependency Composer
-RUN composer install --no-dev --optimize-autoloader
+# Set working directory
+WORKDIR /app/public
 
-# Pastikan hak akses benar
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
-
-# Ekspos port 80 untuk Apache
-EXPOSE 8080
-
-# Perintah untuk menjalankan server
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+CMD php -S 0.0.0.0:8080

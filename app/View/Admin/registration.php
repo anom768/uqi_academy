@@ -39,7 +39,7 @@
         </div>
     </nav></br>
     <div class="container col-xl-10 col-xl-8 px-0 py-5">
-    <?php session_start();
+    <?php 
         if (isset($_SESSION['success'])) { ?>
             <div class="row">
                 <div class="alert alert-success" role="alert">
